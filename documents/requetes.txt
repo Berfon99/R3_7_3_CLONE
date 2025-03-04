@@ -1,0 +1,12 @@
+Pour obtenir la liste dans un document json :
+  https://www.googleapis.com/drive/v3/files
+  --header 'Authorization: Bearer [YOUR_BEARER_TOKEN]' \
+  --header 'Accept: application/json' \
+  file id : 1uRvAkP6_x3s76a3eri6e4gTpsHYn1bwN
+  
+Pour downloader ce fichier :   
+  https://www.googleapis.com/drive/v3/files/1uRvAkP6_x3s76a3eri6e4gTpsHYn1bwN?alt=media
+  --header 'Authorization: Bearer [YOUR_BEARER_TOKEN]' 
+  
+  client id : 1034803701719-inm090sca3et8c12far4o2mlgfu6rqrs.apps.googleusercontent.com
+  

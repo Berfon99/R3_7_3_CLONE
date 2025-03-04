@@ -1,0 +1,7 @@
+ok - Enlever le bouton "Openair2Air³" directement dispo après avoir ouvert l'AIR³ Manager. Il faudrait juste que cette action soit dans le menu.
+ok - Changer le logo de l'APP AIR³ Manager. Logo qui devrait être sur le bureau une fois installé, pour lancer AIR³ Manager.
+ok - Lancement XCTrack par AIR³ Manager fonctionne, mais pas lors du boot.
+- Changer le répertoire où mettre les fichiers xcbs: Avant: /XCTrack/Bootstrap. Android10 : /Android/data/org.xcontest.XCTrack/files/Bootstrap. Provider ?
+- Changer le logo XCTrack sur le bureau. Eviter les bords noirs. Mais attention, il  va y avoir le 7.3 et le 7.3+. La résolution est différente (1920X1200 pour le 7.3+).
+- Peut-être faut-il prévoir un endroit où je peux changer moi-même le fichier image avant de générer l'APK et ainsi pouvoir générer l'APK en fonction de la version. -> ajouter répertoires, 1 pour chaque version contenant pour le logo.
+- langues supportées : à compléter

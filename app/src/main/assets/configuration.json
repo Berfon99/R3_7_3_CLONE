@@ -1,0 +1,40 @@
+{
+   "version": "2.15.735+.A13",
+   "reset":"8ERs1F0yaieESSLH2w08wnHrPSJ6s4DYYKgUDt66dF6IPuocxpSQtbhpEO3yDfIAj-l7gKbznkI006prf3ujDA.99.air3",
+   "modes":[
+      {	 "id": "kiss",
+         "libelle":"Kiss : Keep Interface So Simple",
+         "xcbs":"9BvPhfY5-y9azP0jYRwG3MvJ5OHkfK7Sc2Iprw7ReVMIHMawfYGKmmbPnvLMXyIyp-Kvl4HLgMmmqdk83E-EAQ.99.air3"
+      },
+      {  "id": "easy",
+         "libelle":"Easy : Leisure",
+         "xcbs":"rYBVumw61lP5V9aIxUIDnUZdVEXQ6e-4AkBXJlezSFNvJp3GP4NdCF-031hhpx3p8-e92_Ash2ZtjFiwfDc9Dg.99.air3"
+      },
+      {  "id" : "expert",
+         "libelle":"Expert : Competition and XC",
+         "xcbs":"d4VbsLflXAOKkjL6N9KzoOC_qNycpLiYc1pz2wGHnAMf6msw_ZX5JCFtusjJyIbiI4ixWfNNucMF5w5S4W8KCQ.99.air3"
+      },
+      {  "id" : "paramotor",
+         "libelle":"Paramotor",
+         "xcbs":"6Ipt3jcJxpxeEVgwOltlmHnt9tRDf59AKYDQHRAwhvIDfmkirnvTW-X0JOAnCqJPeCg_41W4RdeouA2087PpCA.99.air3"
+      },
+      {  "id" : "balloon",
+         "libelle":"Balloon",
+         "xcbs":"z1RgmYrqb0DqwQ5uayATlE-VmtwFBEDMv6PL73gw7mcYdtLzScqALUDs6qRw2XjMeicSig0kktACrMfKBrSkCg.99.air3"
+      }
+   ],
+   "themes":[
+      {  "id":"black",
+         "libelle":"Black",
+         "xcbs":"WYqdFyzPa2hWh3bSgBUYuVBn1fEpmZqaSRG48-YkcOu5ctz4kHtcGJF38w-JBDBd8r4uO3B1cJxk-nd5CKBkCg.99.air3"
+      },
+      {  "id":"white",
+         "libelle":"White",
+         "xcbs":"pFl4hIk4JoiSThmQyxYCxD4Mwyf-LKGVoDfjDEX8ANNLo39FGOink4ZArBTir-2ajcrBuqmDEcYKsVSzk_qkBQ.99.air3"
+      },
+      {  "id":"eink",
+         "libelle":"eInk",
+         "xcbs":"TgmpJ18dU1BibzGfr9lYJE3mXAIiKOZiSh5AEBNPmoaqq_W9Z7zqZRNFkURMOC-uNtEXnTFSWyYlIQlfFda9Bw.99.air3"
+      }
+   ]
+}
