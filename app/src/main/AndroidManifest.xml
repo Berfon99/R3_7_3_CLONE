@@ -74,6 +74,9 @@
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".InterfaceActivity" />
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

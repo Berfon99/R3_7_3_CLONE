@@ -72,4 +72,5 @@
     <string name="titre_installation_upgrader">Installation requise</string>
     <string name="message_installation_upgrader">L\'application AIR³ Upgrader doit être installée pour effectuer les mises à jour. Voulez-vous la télécharger ?</string>
     <string name="bouton_download">Télécharger</string>
+    <string name="about_text">Version : \nWeb : www.fly-air3.com\nDéveloppé par : O. Legrand</string>
 </resources>

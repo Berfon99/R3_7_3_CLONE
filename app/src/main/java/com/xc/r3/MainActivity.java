@@ -193,15 +193,9 @@ public class MainActivity extends CommonActivity {
         }
     }
     private void afficherAbout() {
-        Configuration configuration = GestionFichiers.lireConfiguration(this);
-        String titre = getString(R.string.titre_a_propos_de) + " " + getString(R.string.app_name);
-        String version = getString(R.string.version) + " : " + configuration.getVersion();
-        String developpeur = getString(R.string.developpe_par) + " : O. Legrand";
-        String web = getString(R.string.web) + " : " + "www.fly-air3.com";
-        String message = version + "\n" + web + "\n" + developpeur;
-        afficherMessage(message, titre, ICONE_APPLICATION);
+        Intent intent = new Intent(this, AboutActivity.class);
+        startActivity(intent);
     }
-
     private void afficherDialoguePreferences() {
         Intent intent = new Intent(this, PreferencesActivity.class);
         this.startActivityForResult(intent, MainActivity.PREFERENCES);
