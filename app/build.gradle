@@ -10,7 +10,7 @@ android {
         minSdkVersion 31
         targetSdkVersion 32
         versionCode 2163
-        versionName "2.16.735+.A13" //Upgrade = AIR³ Upgrader
+        versionName "2.16.3" //new interface
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {

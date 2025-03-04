@@ -14,22 +14,35 @@ public class Util {
     public static final String NOTIFICATION_DATE_FICHIER = "notification date fichier";
     public static final String NOTIFICATION_ACCES_INTERNET = "notification accès internet";
     private static final int DELAY = 10 * 1000; // délai de 10 secondes avant de lancer
-    public static void lancerXCTRact(Activity activity) {
+
+    public static void lancerXCTrack(Activity activity) {
         Timber.i("Lancer XCTrack...");
         Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage("org.xcontest.XCTrack");
         if (launchIntent != null) {
             launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            Timber.i( "Lancement de XCTrack...");
+            Timber.i("Lancement de XCTrack...");
             activity.startActivity(launchIntent);
         } else {
-            Timber.i( "Problème de nom de package avec XCTrack..");
+            Timber.i("Problème de nom de package avec XCTrack..");
         }
-        activity.getIntent().putExtra(BOOT,false);
+        activity.getIntent().putExtra(BOOT, false);
         activity.finish();
     }
 
+    public static void lancerXCGuide(Activity activity) {
+        Timber.i("Lancer XC Guide...");
+        Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage("indysoft.xc_guide");
+        if (launchIntent != null) {
+            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Timber.i("Lancement de XC Guide...");
+            activity.startActivity(launchIntent);
+        } else {
+            Timber.i("Problème de nom de package avec XC Guide..");
+        }
+    }
+
     public static void lancerMainActivity(Context context, boolean boot) {
-        Timber.i( "Lancement MainActivity au boot ...");
+        Timber.i("Lancement MainActivity au boot ...");
         Intent intent = new Intent(context, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(Util.BOOT, boot);
@@ -52,12 +65,12 @@ public class Util {
         }
 
         AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        long delay=getDelay(context);
+        long delay = getDelay(context);
         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + delay, pendingIntent);
     }
 
     private static long getDelay(Context context) {
-        User user=User.getInstance(context);
+        User user = User.getInstance(context);
         if (user.delayXCTrackOnBoot()) return DELAY;
         return 0;
     }
