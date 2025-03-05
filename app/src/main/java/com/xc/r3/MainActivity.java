@@ -246,4 +246,19 @@ public class MainActivity extends CommonActivity {
     public void setProgressBarVisibility(int visibility) {
         progressBar.setVisibility(visibility);
     }
+
+    private void configureAppWithModel(String modelName) {
+        // Logique pour configurer l'application avec le modèle sélectionné
+        Timber.d("Configuring app with model: " + modelName);
+        // Vous pouvez ajouter ici votre logique spécifique de configuration
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Disposer des observables RxJava pour éviter les fuites de mémoire
+        if (disposables != null) {
+            disposables.dispose();
+        }
+    }
 }

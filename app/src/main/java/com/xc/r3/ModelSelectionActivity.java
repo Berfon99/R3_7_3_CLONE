@@ -203,4 +203,5 @@ public class ModelSelectionActivity extends AppCompatActivity {
         super.onDestroy();
         disposables.clear();
     }
+
 }

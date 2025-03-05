@@ -87,5 +87,7 @@
     <string name="brand_error_message">This application is made for AIR³ devices only</string>
     <string name="what_is_my_air3_version">Not sure about your device? Click here (need internet).</string>
     <string name="select_device">Select Device</string>
+    <string name="error">Erreur</string>
+    <string name="model_save_error">Impossible de sauvegarder la sélection du modèle. Veuillez réessayer.</string>
 
 </resources>
