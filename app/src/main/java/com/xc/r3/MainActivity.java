@@ -36,7 +36,7 @@ public class MainActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dataStoreManager = new DataStoreManager(this);
+        dataStoreManager = DataStoreManager.getInstance(this);
         launchManager = new LaunchManager(this);
         modelSelectionLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),

@@ -1,7 +1,6 @@
 package com.xc.r3;
 
 import android.content.Context;
-
 import androidx.datastore.preferences.core.MutablePreferences;
 import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.PreferencesKeys;
@@ -19,15 +18,7 @@ import io.reactivex.rxjava3.core.Single;
 import timber.log.Timber;
 
 public class DataStoreManager {
-    private static final List<String> ALLOWED_MODELS = Arrays.asList(
-            "AIR3-7.2",
-            "AIR3-7.3",
-            "AIR3-7.3+",
-            "AIR3-7.35",
-            "AIR3-7.35+"
-    );
-
-    private final Context context;
+    private static DataStoreManager instance;
     private final RxDataStore<Preferences> dataStore;
 
     // Preferences Keys
@@ -36,12 +27,69 @@ public class DataStoreManager {
     private static final Preferences.Key<Boolean> MANUAL_MODEL_SELECTED =
             PreferencesKeys.booleanKey("manual_model_selected");
 
-    public DataStoreManager(Context context) {
-        this.context = context;
+    private static final List<String> ALLOWED_MODELS = Arrays.asList(
+            "AIR3-7.2",
+            "AIR3-7.3",
+            "AIR3-7.3+",
+            "AIR3-7.35",
+            "AIR3-7.35+"
+    );
+
+    // Singleton pattern to ensure only one DataStore instance
+    public static synchronized DataStoreManager getInstance(Context context) {
+        if (instance == null) {
+            instance = new DataStoreManager(context.getApplicationContext());
+        }
+        return instance;
+    }
+
+    private DataStoreManager(Context context) {
         this.dataStore = new RxPreferenceDataStoreBuilder(
                 context, "app_preferences").build();
     }
 
+    public Single<Void> saveSelectedModel(String model) {
+        Timber.d("Attempting to save model: %s", model);
+        return dataStore.updateDataAsync(prefs -> {
+            MutablePreferences mutablePreferences = prefs.toMutablePreferences();
+            mutablePreferences.set(SELECTED_MODEL, model);
+            Timber.d("Model saved successfully: %s", model);
+            return Single.just(mutablePreferences);
+        }).flatMap(preferences -> Single.just(null));
+    }
+
+    public Observable<String> getSelectedModel() {
+        return dataStore.data().map(prefs -> {
+            String selectedModel = prefs.get(SELECTED_MODEL);
+            Timber.d("Retrieved selected model: %s", selectedModel);
+            return selectedModel == null ? "" : selectedModel;
+        }).toObservable();
+    }
+
+    public Single<Void> saveManualModelSelected(boolean isManualModelSelected) {
+        Timber.d("Attempting to save manual model selection: %b", isManualModelSelected);
+        return dataStore.updateDataAsync(prefs -> {
+            MutablePreferences mutablePreferences = prefs.toMutablePreferences();
+            mutablePreferences.set(MANUAL_MODEL_SELECTED, isManualModelSelected);
+            Timber.d("Manual model selection saved successfully: %b", isManualModelSelected);
+            return Single.just(mutablePreferences);
+        }).flatMap(preferences -> Single.just(null));
+    }
+
+    public Observable<Boolean> getManualModelSelected() {
+        return dataStore.data().map(prefs -> {
+            Boolean manualModelSelected = prefs.get(MANUAL_MODEL_SELECTED);
+            Timber.d("Retrieved manual model selection: %b", manualModelSelected);
+            return manualModelSelected != null && manualModelSelected;
+        }).onErrorReturnItem(false).toObservable();
+    }
+
+    // Method to check if a model is supported
+    public boolean isDeviceModelSupported(String model) {
+        return ALLOWED_MODELS.contains(model);
+    }
+
+    // Initialize model lists
     public ModelListResult initModelLists(String deviceName) {
         // Initialize the model list
         List<String> modelList = new ArrayList<>(ALLOWED_MODELS);
@@ -60,54 +108,11 @@ public class DataStoreManager {
             modelDisplayMap.put(model, model);
         }
 
-        // Add the device name as the last item with the prefix
-        String deviceNameDisplay = context.getString(R.string.device_name) + " " + deviceName;
-        modelDisplayList.add(deviceNameDisplay);
-        modelDisplayMap.put(deviceNameDisplay, null);
+        // Add the device name as the last item
+        modelDisplayList.add(deviceName);
+        modelDisplayMap.put(deviceName, null);
 
         return new ModelListResult(modelList, modelDisplayList, modelDisplayMap);
-    }
-
-    public boolean isDeviceModelSupported(String model) {
-        return ALLOWED_MODELS.contains(model);
-    }
-
-    public Single<Void> saveSelectedModel(String model) {
-        return dataStore.updateDataAsync(prefs -> {
-                    MutablePreferences mutablePreferences = prefs.toMutablePreferences();
-                    mutablePreferences.set(SELECTED_MODEL, model);
-                    return Single.just(mutablePreferences);
-                }).map(preferences -> (Void) null)
-                .onErrorResumeNext(throwable -> {
-                    Timber.e(throwable, "Error saving selected model");
-                    return Single.just((Void) null);
-                });
-    }
-
-    public Observable<String> getSelectedModel() {
-        return dataStore.data().map(prefs -> {
-            String selectedModel = prefs.get(SELECTED_MODEL);
-            return selectedModel == null ? "" : selectedModel;
-        }).toObservable();
-    }
-
-    public Single<Void> saveManualModelSelected(boolean isManualModelSelected) {
-        return dataStore.updateDataAsync(prefs -> {
-                    MutablePreferences mutablePreferences = prefs.toMutablePreferences();
-                    mutablePreferences.set(MANUAL_MODEL_SELECTED, isManualModelSelected);
-                    return Single.just(mutablePreferences);
-                }).map(preferences -> (Void) null)
-                .onErrorResumeNext(throwable -> {
-                    Timber.e(throwable, "Error saving manual model selection");
-                    return Single.just((Void) null);
-                });
-    }
-
-    public Observable<Boolean> getManualModelSelected() {
-        return dataStore.data().map(prefs -> {
-            Boolean manualModelSelected = prefs.get(MANUAL_MODEL_SELECTED);
-            return manualModelSelected != null && manualModelSelected;
-        }).onErrorReturnItem(false).toObservable();
     }
 
     // Helper class to return multiple values

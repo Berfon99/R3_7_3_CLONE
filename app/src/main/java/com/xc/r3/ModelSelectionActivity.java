@@ -23,6 +23,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import timber.log.Timber;
+import android.util.Log;
 
 public class ModelSelectionActivity extends AppCompatActivity {
 
@@ -49,7 +50,7 @@ public class ModelSelectionActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_model_selection);
 
-        dataStoreManager = new DataStoreManager(this);
+        dataStoreManager = DataStoreManager.getInstance(this);
         modelSpinner = findViewById(R.id.model_spinner);
         Button buttonConfirm = findViewById(R.id.button_confirm);
         linkTextView = findViewById(R.id.linkTextView);
@@ -175,14 +176,17 @@ public class ModelSelectionActivity extends AppCompatActivity {
                 dataStoreManager.saveSelectedModel(selectedModel)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Void>() {
-                            @Override
-                            public void accept(Void unused) throws Throwable {
-                                previousSelection = selectedModel;
-                                Timber.d("Model saved: %s", selectedModel);
-                            }
-                        }, throwable -> Timber.e(throwable, "Error saving selected model"))
+                        .subscribe(
+                                unused -> {  // <- Fix: Explicitly handle the Void argument
+                                    previousSelection = selectedModel;
+                                    Timber.d("Model saved successfully: %s", selectedModel);
+                                },
+                                throwable -> {
+                                    Timber.e(throwable, "Error saving selected model: %s", selectedModel);
+                                }
+                        )
         );
+
     }
     private String getDeviceName() {
         String deviceName = Settings.Global.getString(
