@@ -1,6 +1,7 @@
 package com.xc.r3;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -9,22 +10,66 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import timber.log.Timber;
 import timber.log.Timber.DebugTree;
 
 public class MainActivity extends CommonActivity {
     public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 2323;
+    private static final int MODEL_SELECTION_REQUEST_CODE = 100;
     private ProgressBar progressBar;
     private Menu menu;
     private LaunchManager launchManager;
+    private DataStoreManager dataStoreManager;
+    private CompositeDisposable disposables = new CompositeDisposable();
+    private ActivityResultLauncher<Intent> modelSelectionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialisez launchManager avant l'initialisation de l'interface utilisateur
+        launchManager = new LaunchManager(this);
+
+        // Initialisez le launcher
+        modelSelectionLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // Continuez la configuration
+                        continueSetup(savedInstanceState);
+                    } else {
+                        // Gérez l'annulation ou l'échec
+                        finish(); // Ou toute autre action appropriée
+                    }
+                }
+        );
+        dataStoreManager = new DataStoreManager(this);
+        disposables.add(dataStoreManager.getManualModelSelected()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(isManualModelSelected -> {
+                    Timber.d("MainActivity: onCreate - isManualModelSelected: " + isManualModelSelected);
+                    if (!isManualModelSelected) {
+                        // Lancez l'activité de sélection de modèle
+                        Intent intent = new Intent(MainActivity.this, ModelSelectionActivity.class);
+                        modelSelectionLauncher.launch(intent);
+                    } else {
+                        continueSetup(savedInstanceState);
+                    }
+                }, throwable -> Timber.e(throwable, "Error getting manual model selection")));
+    }
+
+    private void continueSetup(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         launchManager = new LaunchManager(this);
         if (!Settings.canDrawOverlays(this)) {
@@ -86,7 +131,10 @@ public class MainActivity extends CommonActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        launchManager.setMenuItemsDownload(menu);
+        // Vérifiez d'abord si launchManager est initialisé
+        if (launchManager != null) {
+            launchManager.setMenuItemsDownload(menu);
+        }
         return true;
     }
 
@@ -144,10 +192,23 @@ public class MainActivity extends CommonActivity {
         launchManager.downloadFichierTermine(fichier);
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PREFERENCES) {
+
+        // Vérifiez le code de requête pour la sélection de modèle
+        if (requestCode == MODEL_SELECTION_REQUEST_CODE) {
+            // La sélection de modèle est terminée, continuez la configuration
+            // Vous pouvez vérifier resultCode si nécessaire
+            if (resultCode == Activity.RESULT_OK) {
+                continueSetup(null);
+            } else {
+                // Gérez le cas où la sélection de modèle a échoué
+                // Par exemple, fermez l'application ou affichez un message
+                finish(); // ou une autre action appropriée
+            }
+        } else if (requestCode == PREFERENCES) {
             launchManager.chooseAccount();
         } else if (requestCode == MainActivity.LISTE) {
             if (resultCode == ListActivity.PAS_ACCES_INTERNET) {
@@ -161,7 +222,6 @@ public class MainActivity extends CommonActivity {
             }
         }
     }
-
     @Override
     protected void finDemandeAccessFichiers() {
     }
