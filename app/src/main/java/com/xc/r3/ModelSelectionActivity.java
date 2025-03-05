@@ -113,7 +113,6 @@ public class ModelSelectionActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
     private void setupSpinnerListener() {
         modelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -180,6 +179,7 @@ public class ModelSelectionActivity extends AppCompatActivity {
                             @Override
                             public void accept(Void unused) throws Throwable {
                                 previousSelection = selectedModel;
+                                Timber.d("Model saved: %s", selectedModel);
                             }
                         }, throwable -> Timber.e(throwable, "Error saving selected model"))
         );

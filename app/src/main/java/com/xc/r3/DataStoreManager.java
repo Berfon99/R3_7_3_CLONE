@@ -1,24 +1,22 @@
 package com.xc.r3;
 
 import android.content.Context;
-import androidx.datastore.preferences.core.Preferences;
+
 import androidx.datastore.preferences.core.MutablePreferences;
+import androidx.datastore.preferences.core.Preferences;
 import androidx.datastore.preferences.core.PreferencesKeys;
 import androidx.datastore.preferences.rxjava3.RxPreferenceDataStoreBuilder;
 import androidx.datastore.rxjava3.RxDataStore;
-import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.functions.Function;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import android.util.Log;
-import com.xc.r3.R;
-import timber.log.Timber;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+import timber.log.Timber;
 
 public class DataStoreManager {
     private static final List<String> ALLOWED_MODELS = Arrays.asList(
@@ -76,10 +74,14 @@ public class DataStoreManager {
 
     public Single<Void> saveSelectedModel(String model) {
         return dataStore.updateDataAsync(prefs -> {
-            MutablePreferences mutablePreferences = prefs.toMutablePreferences();
-            mutablePreferences.set(SELECTED_MODEL, model);
-            return Single.just(mutablePreferences);
-        }).map(preferences -> null);
+                    MutablePreferences mutablePreferences = prefs.toMutablePreferences();
+                    mutablePreferences.set(SELECTED_MODEL, model);
+                    return Single.just(mutablePreferences);
+                }).map(preferences -> (Void) null)
+                .onErrorResumeNext(throwable -> {
+                    Timber.e(throwable, "Error saving selected model");
+                    return Single.just((Void) null);
+                });
     }
 
     public Observable<String> getSelectedModel() {
@@ -94,12 +96,13 @@ public class DataStoreManager {
                     MutablePreferences mutablePreferences = prefs.toMutablePreferences();
                     mutablePreferences.set(MANUAL_MODEL_SELECTED, isManualModelSelected);
                     return Single.just(mutablePreferences);
-                }).map(preferences -> (Void) null) // Forcer Single<Void>
+                }).map(preferences -> (Void) null)
                 .onErrorResumeNext(throwable -> {
                     Timber.e(throwable, "Error saving manual model selection");
-                    return Single.just((Void) null); // Forcer Single<Void>
+                    return Single.just((Void) null);
                 });
     }
+
     public Observable<Boolean> getManualModelSelected() {
         return dataStore.data().map(prefs -> {
             Boolean manualModelSelected = prefs.get(MANUAL_MODEL_SELECTED);

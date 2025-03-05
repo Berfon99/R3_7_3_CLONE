@@ -3,6 +3,7 @@ package com.xc.r3;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
@@ -13,7 +14,6 @@ import android.widget.ProgressBar;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
@@ -25,13 +25,13 @@ import timber.log.Timber.DebugTree;
 
 public class MainActivity extends CommonActivity {
     public static int ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE = 2323;
-    private static final int MODEL_SELECTION_REQUEST_CODE = 100;
     private ProgressBar progressBar;
     private Menu menu;
     private LaunchManager launchManager;
     private DataStoreManager dataStoreManager;
     private CompositeDisposable disposables = new CompositeDisposable();
     private ActivityResultLauncher<Intent> modelSelectionLauncher;
+    private ActivityResultLauncher<Intent> listActivityLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,14 @@ public class MainActivity extends CommonActivity {
                     } else {
                         // Gérez l'annulation ou l'échec
                         finish(); // Ou toute autre action appropriée
+                    }
+                }
+        );
+        listActivityLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == ListActivity.PAS_ACCES_INTERNET) {
+                        afficherMessageAccesInternet();
                     }
                 }
         );
@@ -67,7 +75,7 @@ public class MainActivity extends CommonActivity {
 
     private void continueSetup(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
-        launchManager = new LaunchManager(this);
+        //launchManager = new LaunchManager(this); // Removed because already initialized in onCreate
         if (!Settings.canDrawOverlays(this)) {
             launchManager.requestPermission();
         }
@@ -111,6 +119,20 @@ public class MainActivity extends CommonActivity {
         imageXCTrackInterface.setOnClickListener(v -> lancerInterfaceActivity());
         imageXCGuideLaunch.setOnClickListener(v -> launchManager.lancerXCGuide());
         imageCheckForUpgrades.setOnClickListener(v -> launchManager.afficherDialogueUpgrades());
+        setActionBarTitleWithSelectedModel();
+    }
+
+    private void setActionBarTitleWithSelectedModel() {
+        disposables.add(dataStoreManager.getSelectedModel()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(selectedModel -> {
+                    String finalSelectedModel = selectedModel != null ? selectedModel : Build.MODEL;
+                    String androidVersion = Build.VERSION.RELEASE;
+                    if (getSupportActionBar() != null) {
+                        getSupportActionBar().setTitle("AIR³ Upgrader - " + finalSelectedModel + " - Android " + androidVersion);
+                    }
+                }, throwable -> Timber.e(throwable, "Error getting selected model")));
     }
 
     private void lancerInterfaceActivity() {
@@ -150,7 +172,7 @@ public class MainActivity extends CommonActivity {
                 break;
             case R.id.action_liste_fichiers:
                 Intent intent = new Intent(this, ListActivity.class);
-                startActivityForResult(intent, MainActivity.LISTE);
+                listActivityLauncher.launch(intent);
                 break;
             case R.id.action_upgrades:
                 launchManager.afficherDialogueUpgrades();
@@ -188,36 +210,6 @@ public class MainActivity extends CommonActivity {
         launchManager.downloadFichierTermine(fichier);
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Vérifiez le code de requête pour la sélection de modèle
-        if (requestCode == MODEL_SELECTION_REQUEST_CODE) {
-            // La sélection de modèle est terminée, continuez la configuration
-            // Vous pouvez vérifier resultCode si nécessaire
-            if (resultCode == Activity.RESULT_OK) {
-                continueSetup(null);
-            } else {
-                // Gérez le cas où la sélection de modèle a échoué
-                // Par exemple, fermez l'application ou affichez un message
-                finish(); // ou une autre action appropriée
-            }
-        } else if (requestCode == PREFERENCES) {
-            launchManager.chooseAccount();
-        } else if (requestCode == MainActivity.LISTE) {
-            if (resultCode == ListActivity.PAS_ACCES_INTERNET) {
-                afficherMessageAccesInternet();
-            }
-        } else if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
-            if (!Settings.canDrawOverlays(this)) {
-                afficherMessage("Acces refusé", "Erreur", ICONE_APPLICATION);
-            } else {
-                afficherMessage("Acces autorisé", "Info", ICONE_APPLICATION);
-            }
-        }
-    }
     @Override
     protected void finDemandeAccessFichiers() {
     }
