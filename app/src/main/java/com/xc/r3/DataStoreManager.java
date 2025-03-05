@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import android.util.Log;
 import com.xc.r3.R;
+import timber.log.Timber;
+
 
 public class DataStoreManager {
     private static final List<String> ALLOWED_MODELS = Arrays.asList(
@@ -89,17 +91,20 @@ public class DataStoreManager {
 
     public Single<Void> saveManualModelSelected(boolean isManualModelSelected) {
         return dataStore.updateDataAsync(prefs -> {
-            MutablePreferences mutablePreferences = prefs.toMutablePreferences();
-            mutablePreferences.set(MANUAL_MODEL_SELECTED, isManualModelSelected);
-            return Single.just(mutablePreferences);
-        }).map(preferences -> null);
+                    MutablePreferences mutablePreferences = prefs.toMutablePreferences();
+                    mutablePreferences.set(MANUAL_MODEL_SELECTED, isManualModelSelected);
+                    return Single.just(mutablePreferences);
+                }).map(preferences -> (Void) null) // Forcer Single<Void>
+                .onErrorResumeNext(throwable -> {
+                    Timber.e(throwable, "Error saving manual model selection");
+                    return Single.just((Void) null); // Forcer Single<Void>
+                });
     }
-
     public Observable<Boolean> getManualModelSelected() {
         return dataStore.data().map(prefs -> {
             Boolean manualModelSelected = prefs.get(MANUAL_MODEL_SELECTED);
             return manualModelSelected != null && manualModelSelected;
-        }).toObservable();
+        }).onErrorReturnItem(false).toObservable();
     }
 
     // Helper class to return multiple values

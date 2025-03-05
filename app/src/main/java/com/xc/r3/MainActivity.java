@@ -36,11 +36,8 @@ public class MainActivity extends CommonActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialisez launchManager avant l'initialisation de l'interface utilisateur
+        dataStoreManager = new DataStoreManager(this);
         launchManager = new LaunchManager(this);
-
-        // Initialisez le launcher
         modelSelectionLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
@@ -53,7 +50,6 @@ public class MainActivity extends CommonActivity {
                     }
                 }
         );
-        dataStoreManager = new DataStoreManager(this);
         disposables.add(dataStoreManager.getManualModelSelected()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
