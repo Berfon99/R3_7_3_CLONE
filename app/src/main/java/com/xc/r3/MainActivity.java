@@ -1,7 +1,6 @@
 package com.xc.r3;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,15 +10,10 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import timber.log.Timber;
 import timber.log.Timber.DebugTree;
 
@@ -28,48 +22,13 @@ public class MainActivity extends CommonActivity {
     private ProgressBar progressBar;
     private Menu menu;
     private LaunchManager launchManager;
-    private DataStoreManager dataStoreManager;
-    private CompositeDisposable disposables = new CompositeDisposable();
-    private ActivityResultLauncher<Intent> modelSelectionLauncher;
-    private ActivityResultLauncher<Intent> listActivityLauncher;
+    private DataStorageManager dataStorageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dataStoreManager = DataStoreManager.getInstance(this);
-        launchManager = new LaunchManager(this);
-
-        modelSelectionLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Model selected, continue setup
-                        continueSetup(savedInstanceState);
-                    } else {
-                        // User cancelled or an error occurred, handle as needed
-                        finish(); // Or any other appropriate action
-                    }
-                }
-        );
-
-        disposables.add(dataStoreManager.getSelectedModel()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(selectedModel -> {
-                    Timber.d("MainActivity: onCreate - selectedModel: %s", selectedModel);
-                    if (selectedModel.isEmpty()) {
-                        // No model selected, launch ModelSelectionActivity
-                        Intent intent = new Intent(MainActivity.this, ModelSelectionActivity.class);
-                        modelSelectionLauncher.launch(intent);
-                    } else {
-                        // Model already selected, continue setup
-                        continueSetup(savedInstanceState);
-                    }
-                }, throwable -> Timber.e(throwable, "Error getting selected model")));
-    }
-    private void continueSetup(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
-        //launchManager = new LaunchManager(this); // Removed because already initialized in onCreate
+        launchManager = new LaunchManager(this);
         if (!Settings.canDrawOverlays(this)) {
             launchManager.requestPermission();
         }
@@ -85,13 +44,16 @@ public class MainActivity extends CommonActivity {
         }
 
         // Get the DataStorageManager instance
-        DataStorageManager dataStorageManager = DataStorageManager.getInstance(this);
+        dataStorageManager = DataStorageManager.getInstance(this);
 
         // Retrieve the selected model
         String selectedModel = dataStorageManager.getSelectedModel();
 
         // Log the selected model
         Timber.d("Selected Model: %s", selectedModel);
+
+        // Set the action bar title
+        setActionBarTitleWithSelectedModel();
 
         this.progressBar = findViewById(R.id.progressBar);
         this.preferences = new Preferences(this);
@@ -122,20 +84,15 @@ public class MainActivity extends CommonActivity {
         imageXCTrackInterface.setOnClickListener(v -> lancerInterfaceActivity());
         imageXCGuideLaunch.setOnClickListener(v -> launchManager.lancerXCGuide());
         imageCheckForUpgrades.setOnClickListener(v -> launchManager.afficherDialogueUpgrades());
-        setActionBarTitleWithSelectedModel();
     }
 
     private void setActionBarTitleWithSelectedModel() {
-        disposables.add(dataStoreManager.getSelectedModel()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(selectedModel -> {
-                    String finalSelectedModel = selectedModel != null ? selectedModel : Build.MODEL;
-                    String androidVersion = Build.VERSION.RELEASE;
-                    if (getSupportActionBar() != null) {
-                        getSupportActionBar().setTitle("AIR³ Upgrader - " + finalSelectedModel + " - Android " + androidVersion);
-                    }
-                }, throwable -> Timber.e(throwable, "Error getting selected model")));
+        String selectedModel = dataStorageManager.getSelectedModel();
+        String finalSelectedModel = selectedModel.isEmpty() ? Build.MODEL : selectedModel;
+        String androidVersion = Build.VERSION.RELEASE;
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("AIR³ Upgrader - " + finalSelectedModel + " - Android " + androidVersion);
+        }
     }
 
     private void lancerInterfaceActivity() {
@@ -152,10 +109,7 @@ public class MainActivity extends CommonActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        // Vérifiez d'abord si launchManager est initialisé
-        if (launchManager != null) {
-            launchManager.setMenuItemsDownload(menu);
-        }
+        launchManager.setMenuItemsDownload(menu);
         return true;
     }
 
@@ -175,7 +129,7 @@ public class MainActivity extends CommonActivity {
                 break;
             case R.id.action_liste_fichiers:
                 Intent intent = new Intent(this, ListActivity.class);
-                listActivityLauncher.launch(intent);
+                startActivityForResult(intent, MainActivity.LISTE);
                 break;
             case R.id.action_upgrades:
                 launchManager.afficherDialogueUpgrades();
@@ -214,6 +168,24 @@ public class MainActivity extends CommonActivity {
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PREFERENCES) {
+            launchManager.chooseAccount();
+        } else if (requestCode == MainActivity.LISTE) {
+            if (resultCode == ListActivity.PAS_ACCES_INTERNET) {
+                afficherMessageAccesInternet();
+            }
+        } else if (requestCode == ACTION_MANAGE_OVERLAY_PERMISSION_REQUEST_CODE) {
+            if (!Settings.canDrawOverlays(this)) {
+                afficherMessage("Acces refusé", "Erreur", ICONE_APPLICATION);
+            } else {
+                afficherMessage("Acces autorisé", "Info", ICONE_APPLICATION);
+            }
+        }
+    }
+
+    @Override
     protected void finDemandeAccessFichiers() {
     }
 
@@ -236,20 +208,5 @@ public class MainActivity extends CommonActivity {
 
     public void setProgressBarVisibility(int visibility) {
         progressBar.setVisibility(visibility);
-    }
-
-    private void configureAppWithModel(String modelName) {
-        // Logique pour configurer l'application avec le modèle sélectionné
-        Timber.d("Configuring app with model: " + modelName);
-        // Vous pouvez ajouter ici votre logique spécifique de configuration
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        // Disposer des observables RxJava pour éviter les fuites de mémoire
-        if (disposables != null) {
-            disposables.dispose();
-        }
     }
 }
