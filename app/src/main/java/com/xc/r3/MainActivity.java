@@ -2,6 +2,7 @@ package com.xc.r3;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
@@ -21,6 +22,7 @@ public class MainActivity extends CommonActivity {
     private ProgressBar progressBar;
     private Menu menu;
     private LaunchManager launchManager;
+    private DataStorageManager dataStorageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +44,16 @@ public class MainActivity extends CommonActivity {
         }
 
         // Get the DataStorageManager instance
-        DataStorageManager dataStorageManager = DataStorageManager.getInstance(this);
+        dataStorageManager = DataStorageManager.getInstance(this);
 
         // Retrieve the selected model
         String selectedModel = dataStorageManager.getSelectedModel();
 
         // Log the selected model
         Timber.d("Selected Model: %s", selectedModel);
+
+        // Set the action bar title
+        setActionBarTitleWithSelectedModel();
 
         this.progressBar = findViewById(R.id.progressBar);
         this.preferences = new Preferences(this);
@@ -79,6 +84,15 @@ public class MainActivity extends CommonActivity {
         imageXCTrackInterface.setOnClickListener(v -> lancerInterfaceActivity());
         imageXCGuideLaunch.setOnClickListener(v -> launchManager.lancerXCGuide());
         imageCheckForUpgrades.setOnClickListener(v -> launchManager.afficherDialogueUpgrades());
+    }
+
+    private void setActionBarTitleWithSelectedModel() {
+        String selectedModel = dataStorageManager.getSelectedModel();
+        String finalSelectedModel = selectedModel.isEmpty() ? Build.MODEL : selectedModel;
+        String androidVersion = Build.VERSION.RELEASE;
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("AIR³ Upgrader - " + finalSelectedModel + " - Android " + androidVersion);
+        }
     }
 
     private void lancerInterfaceActivity() {
