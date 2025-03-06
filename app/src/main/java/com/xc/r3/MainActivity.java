@@ -84,6 +84,15 @@ public class MainActivity extends CommonActivity {
             Timber.v("Démarrage de Timber!");
         }
 
+        // Get the DataStorageManager instance
+        DataStorageManager dataStorageManager = DataStorageManager.getInstance(this);
+
+        // Retrieve the selected model
+        String selectedModel = dataStorageManager.getSelectedModel();
+
+        // Log the selected model
+        Timber.d("Selected Model: %s", selectedModel);
+
         this.progressBar = findViewById(R.id.progressBar);
         this.preferences = new Preferences(this);
         notificationDateFichier = false;
