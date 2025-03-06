@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -147,26 +148,13 @@ public class PreferencesActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .show();
     }
-    private String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.startsWith(manufacturer)) {
-            return capitalize(model);
-        } else {
-            return capitalize(manufacturer) + " " + model;
-        }
-    }
 
-    private String capitalize(String s) {
-        if (s == null || s.length() == 0) {
-            return "";
+    private String getDeviceName() {
+        String deviceName = Settings.Global.getString(getContentResolver(), Settings.Global.DEVICE_NAME);
+        if (deviceName == null || deviceName.isEmpty()) {
+            return getString(R.string.unknown_device);
         }
-        char first = s.charAt(0);
-        if (Character.isUpperCase(first)) {
-            return s;
-        } else {
-            return Character.toUpperCase(first) + s.substring(1);
-        }
+        return deviceName;
     }
 
     @Override

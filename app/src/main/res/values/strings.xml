@@ -85,4 +85,5 @@
     <string name="device_name_confirmation_message">Use Device name instead of an allowed model? Device name should strictly follow the following structure to work "AIR3-?.?".</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="unknown_device">Unknown device</string>
 </resources>

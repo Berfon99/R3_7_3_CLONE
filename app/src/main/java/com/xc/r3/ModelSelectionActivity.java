@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.provider.Settings;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -114,7 +115,7 @@ public class ModelSelectionActivity extends AppCompatActivity {
     private void showDeviceNameConfirmationDialog(String deviceName) {
         new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.device_name_confirmation_title))
-                .setMessage(getString(R.string.device_name_confirmation_message, deviceName))
+                .setMessage(getString(R.string.device_name_confirmation_message))
                 .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                     dataStorageManager.saveSelectedModel(deviceName);
                     startActivity(new Intent(ModelSelectionActivity.this, MainActivity.class));
@@ -132,24 +133,10 @@ public class ModelSelectionActivity extends AppCompatActivity {
     }
 
     private String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        if (model.startsWith(manufacturer)) {
-            return capitalize(model);
-        } else {
-            return capitalize(manufacturer) + " " + model;
+        String deviceName = Settings.Global.getString(getContentResolver(), Settings.Global.DEVICE_NAME);
+        if (deviceName == null || deviceName.isEmpty()) {
+            return getString(R.string.unknown_device);
         }
-    }
-
-    private String capitalize(String s) {
-        if (s == null || s.length() == 0) {
-            return "";
-        }
-        char first = s.charAt(0);
-        if (Character.isUpperCase(first)) {
-            return s;
-        } else {
-            return Character.toUpperCase(first) + s.substring(1);
-        }
+        return deviceName;
     }
 }
