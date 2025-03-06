@@ -206,6 +206,12 @@ public class MainActivity extends CommonActivity {
         launchManager.afficherAttente();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setActionBarTitleWithSelectedModel();
+    }
+
     public void setProgressBarVisibility(int visibility) {
         progressBar.setVisibility(visibility);
     }

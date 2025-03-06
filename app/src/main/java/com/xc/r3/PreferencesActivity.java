@@ -103,7 +103,8 @@ public class PreferencesActivity extends AppCompatActivity {
             String selectedModelInLambda = modelSpinner.getSelectedItem().toString();
             if (selectedModelInLambda.equals("Device name: " + deviceName)) {
                 showDeviceNameConfirmationDialog(deviceName);
-            } else {
+            }
+            else {
                 dataStorageManager.saveSelectedModel(selectedModelInLambda);
             }
         });
@@ -171,9 +172,9 @@ public class PreferencesActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         sauver();
+        setResult(RESULT_OK);
         super.onBackPressed();
     }
-
     private void sauver() {
         boolean bootXCtrack = switchXCTrackBoot.isChecked();
         boolean delayXCtrackOnBoot = switchDelayXCTrackOnBoot.isChecked();
