@@ -91,7 +91,7 @@ public class MainActivity extends CommonActivity {
         String finalSelectedModel = selectedModel.isEmpty() ? Build.MODEL : selectedModel;
         String androidVersion = Build.VERSION.RELEASE;
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("AIR³ Upgrader - " + finalSelectedModel + " - Android " + androidVersion);
+            getSupportActionBar().setTitle("AIR³ Manager - " + finalSelectedModel + " - Android " + androidVersion);
         }
     }
 
