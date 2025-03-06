@@ -99,19 +99,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-    <Spinner
-        android:id="@+id/model_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
     <TextView
-        android:id="@+id/linkTextView"
+        android:id="@+id/select_device_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -119,11 +108,20 @@
         android:layout_marginEnd="16dp"
         android:text="@string/select_device"
         android:textColor="@color/colorPrimary"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/model_spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+    <Spinner
+        android:id="@+id/model_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/select_device_text_view" />
 
     <Button
         android:id="@+id/button_confirm"
@@ -133,6 +131,6 @@
         android:text="@string/ok"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linkTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/model_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

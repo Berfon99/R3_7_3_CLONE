@@ -31,7 +31,6 @@ public class PreferencesActivity extends AppCompatActivity {
     private User user;
 
     private Spinner modelSpinner;
-    private TextView linkTextView;
     private Button buttonConfirm;
     private String deviceName;
     private List<String> modelList;
@@ -58,7 +57,6 @@ public class PreferencesActivity extends AppCompatActivity {
 
         // Initialize Model Selection UI
         modelSpinner = findViewById(R.id.model_spinner);
-        linkTextView = findViewById(R.id.linkTextView);
         buttonConfirm = findViewById(R.id.button_confirm);
 
         // Setup Model Selection
@@ -95,18 +93,9 @@ public class PreferencesActivity extends AppCompatActivity {
         String selectedModel = dataStorageManager.getSelectedModel();
         if (!selectedModel.isEmpty()) {
             modelSpinner.setSelection(modelList.indexOf(selectedModel));
-        } else if (allowedModels.contains(Build.MODEL)) {
-            modelSpinner.setSelection(modelList.indexOf(Build.MODEL));
         } else {
             modelSpinner.setSelection(modelList.indexOf("Device name: " + deviceName));
         }
-
-        // Set the click listener for the linkTextView
-        linkTextView.setOnClickListener(v -> {
-            String url = "https://www.fly-air3.com/ufaqs/which-version-of-air3-is-it/";
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-        });
 
         // Set the click listener for the buttonConfirm
         buttonConfirm.setOnClickListener(v -> {
