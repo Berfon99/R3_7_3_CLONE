@@ -1,8 +1,8 @@
 package com.xc.r3;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,33 +10,27 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.xc.r3.R;
 
 import java.util.List;
 import java.util.Map;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import timber.log.Timber;
-import android.util.Log;
 
 public class ModelSelectionActivity extends AppCompatActivity {
 
     private DataStoreManager dataStoreManager;
-    private List<String> modelList;
-    private List<String> modelDisplayList;
-    private Map<String, String> modelDisplayMap;
     private Spinner modelSpinner;
-    private String deviceName;
-    private String previousSelection;
-    private boolean isSpinnerInitialized = false;
     private TextView linkTextView;
-    private CompositeDisposable disposables = new CompositeDisposable();
+    private String deviceName;
+    private List<String> modelList;
+    private Map<String, String> modelDisplayMap;
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +52,7 @@ public class ModelSelectionActivity extends AppCompatActivity {
         deviceName = getDeviceName();
         DataStoreManager.ModelListResult modelListResult = dataStoreManager.initModelLists(deviceName);
         modelList = modelListResult.modelList;
-        modelDisplayList = modelListResult.modelDisplayList;
+        List<String> modelDisplayList = modelListResult.modelDisplayList;
         modelDisplayMap = modelListResult.modelDisplayMap;
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -77,62 +71,11 @@ public class ModelSelectionActivity extends AppCompatActivity {
 
         modelSpinner.setSelection(defaultModelIndex);
 
-        // Initialize previousSelection
-        previousSelection = (defaultModelIndex != -1)
-                ? modelList.get(defaultModelIndex)
-                : deviceName;
-
-        setupSpinnerListener();
-
-        buttonConfirm.setOnClickListener(v -> {
-            disposables.add(dataStoreManager.saveManualModelSelected(true)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<Void>() {
-                        @Override
-                        public void accept(Void unused) throws Throwable {
-                            // Do nothing on success
-                        }
-                    }, throwable -> Timber.e(throwable, "Error saving manual model selection")));
-
-            String selectedDisplayString = modelSpinner.getSelectedItem().toString();
-            String selectedModel = modelDisplayMap.get(selectedDisplayString);
-
-            if (selectedModel == null) {
-                saveSelectedModel(deviceName);
-            } else {
-                saveSelectedModel(selectedModel);
-            }
-            setResult(RESULT_OK);
-            finish();
-        });
-
-        // Set the click listener for the linkTextView
-        linkTextView.setOnClickListener(v -> {
-            String url = "https://www.fly-air3.com/ufaqs/which-version-of-air3-is-it/";
-            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
-            startActivity(intent);
-        });
-    }
-    private void setupSpinnerListener() {
+        // Set up the spinner listener (no need to save here)
         modelSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Timber.d("onItemSelected called");
-                if (isSpinnerInitialized) {
-                    String selectedDisplayString = parent.getItemAtPosition(position).toString();
-                    String selectedModel = modelDisplayMap.get(selectedDisplayString);
-
-                    if (!previousSelection.equals(selectedModel)) {
-                        if (selectedModel == null) {
-                            showDeviceNameConfirmationDialog();
-                        } else {
-                            saveSelectedModel(selectedModel);
-                        }
-                    }
-                } else {
-                    isSpinnerInitialized = true;
-                }
             }
 
             @Override
@@ -140,66 +83,36 @@ public class ModelSelectionActivity extends AppCompatActivity {
                 // Another interface callback
             }
         });
-    }
 
-    private void showBrandErrorDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Error")
-                .setMessage(getString(R.string.brand_error_message))
-                .setPositiveButton(getString(R.string.ok), (dialog, which) -> finishAffinity())
-                .setCancelable(false)
-                .show();
-    }
+        // Set up the OK button listener
+        buttonConfirm.setOnClickListener(v -> {
+            String selectedDisplayString = modelSpinner.getSelectedItem().toString();
+            String selectedModel = modelDisplayMap.get(selectedDisplayString);
+            if (selectedModel == null) {
+                selectedModel = deviceName;
+            }
 
-    private void showDeviceNameConfirmationDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.device_name_confirmation_title))
-                .setMessage(getString(R.string.device_name_confirmation_message))
-                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                    // Save the device name as the selected model
-                    saveSelectedModel(deviceName);
-                    dialog.dismiss();
-                })
-                .setNegativeButton(getString(R.string.no), (dialog, which) -> {
-                    // Reset the selection to the previous one
-                    int previousSelectionIndex = modelList.indexOf(previousSelection);
-                    if (previousSelectionIndex != -1) {
-                        modelSpinner.setSelection(previousSelectionIndex);
-                    }
-                    dialog.dismiss();
-                })
-                .show();
-    }
+            // Save the selected model and the manual selection flag
+            String finalSelectedModel = selectedModel;
+            disposables.add(dataStoreManager.saveSelectedModel(finalSelectedModel)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<Void>() {
+                        @Override
+                        public void accept(Void unused) throws Throwable {
+                            Timber.d("Model saved successfully: %s", finalSelectedModel);
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                    }, throwable -> Timber.e(throwable, "Error saving model selection")));
+        });
 
-    private void saveSelectedModel(String selectedModel) {
-        disposables.add(
-                dataStoreManager.saveSelectedModel(selectedModel)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                                unused -> {  // <- Fix: Explicitly handle the Void argument
-                                    previousSelection = selectedModel;
-                                    Timber.d("Model saved successfully: %s", selectedModel);
-                                },
-                                throwable -> {
-                                    Timber.e(throwable, "Error saving selected model: %s", selectedModel);
-                                }
-                        )
-        );
-
-    }
-    private String getDeviceName() {
-        String deviceName = Settings.Global.getString(
-                getContentResolver(),
-                Settings.Global.DEVICE_NAME
-        );
-        return deviceName != null ? deviceName : getString(R.string.unknown_device);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finishAffinity();
+        // Set the click listener for the linkTextView
+        linkTextView.setOnClickListener(v -> {
+            String url = "https://www.fly-air3.com/ufaqs/which-version-of-air3-is-it/";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -208,4 +121,15 @@ public class ModelSelectionActivity extends AppCompatActivity {
         disposables.clear();
     }
 
+    private String getDeviceName() {
+        return android.os.Build.MODEL;
+    }
+
+    private void showBrandErrorDialog() {
+        // Implement your error dialog here
+    }
+
+    private void saveSelectedModel(String model) {
+        // Implement your save logic here
+    }
 }

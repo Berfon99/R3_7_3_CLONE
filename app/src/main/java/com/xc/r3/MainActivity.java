@@ -38,41 +38,35 @@ public class MainActivity extends CommonActivity {
         super.onCreate(savedInstanceState);
         dataStoreManager = DataStoreManager.getInstance(this);
         launchManager = new LaunchManager(this);
+
         modelSelectionLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
                     if (result.getResultCode() == Activity.RESULT_OK) {
-                        // Continuez la configuration
+                        // Model selected, continue setup
                         continueSetup(savedInstanceState);
                     } else {
-                        // Gérez l'annulation ou l'échec
-                        finish(); // Ou toute autre action appropriée
+                        // User cancelled or an error occurred, handle as needed
+                        finish(); // Or any other appropriate action
                     }
                 }
         );
-        listActivityLauncher = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == ListActivity.PAS_ACCES_INTERNET) {
-                        afficherMessageAccesInternet();
-                    }
-                }
-        );
-        disposables.add(dataStoreManager.getManualModelSelected()
+
+        disposables.add(dataStoreManager.getSelectedModel()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(isManualModelSelected -> {
-                    Timber.d("MainActivity: onCreate - isManualModelSelected: " + isManualModelSelected);
-                    if (!isManualModelSelected) {
-                        // Lancez l'activité de sélection de modèle
+                .subscribe(selectedModel -> {
+                    Timber.d("MainActivity: onCreate - selectedModel: %s", selectedModel);
+                    if (selectedModel.isEmpty()) {
+                        // No model selected, launch ModelSelectionActivity
                         Intent intent = new Intent(MainActivity.this, ModelSelectionActivity.class);
                         modelSelectionLauncher.launch(intent);
                     } else {
+                        // Model already selected, continue setup
                         continueSetup(savedInstanceState);
                     }
-                }, throwable -> Timber.e(throwable, "Error getting manual model selection")));
+                }, throwable -> Timber.e(throwable, "Error getting selected model")));
     }
-
     private void continueSetup(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         //launchManager = new LaunchManager(this); // Removed because already initialized in onCreate
