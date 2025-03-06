@@ -7,7 +7,8 @@ import android.view.MenuItem;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import androidx.appcompat.app.*;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
@@ -86,10 +87,9 @@ public class PreferencesActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public void onBackPressed() {
         sauver();
-        finish();
+        super.onBackPressed();
     }
 
     private void sauver() {
@@ -109,6 +109,4 @@ public class PreferencesActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

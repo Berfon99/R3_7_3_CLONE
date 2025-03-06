@@ -2,7 +2,6 @@ package com.xc.r3;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -10,7 +9,6 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -87,15 +85,14 @@ public class LaunchManager {
                 if (mainActivity.boot) {
                     String message = mainActivity.getString(R.string.fichier) + " : " + fichier.getName() + "\n" + mainActivity.getString(R.string.mauvaise_date);
                     mainActivity.lancerNotification(message, Util.NOTIFICATION_DATE_FICHIER);
-                    Toast.makeText(mainActivity, message, Toast.LENGTH_LONG).show();
                 } else {
                     afficherMessageWarning(fichier);
                 }
             }
         } else if (mainActivity.boot) {
-            if (mainActivity.user.lancerXCTrackBoot()) {
-                lancerXCTrack();
-            }
+            //if (mainActivity.user.lancerXCTrackBoot()) {
+            //    lancerXCTrack();
+            //}
             mainActivity.getIntent().putExtra(Util.BOOT, false);
             mainActivity.finish();
         }
@@ -109,9 +106,9 @@ public class LaunchManager {
 
     public void creationFichierTerminee(Fichier fichier) {
         if (mainActivity.boot) {
-            if (mainActivity.user.lancerXCTrackBoot()) {
-                lancerXCTrack();
-            }
+            //if (mainActivity.user.lancerXCTrackBoot()) {
+            //    lancerXCTrack();
+            //}
             mainActivity.finish();
         }
     }
@@ -124,9 +121,9 @@ public class LaunchManager {
 
     public void downloadFichierTermine(Fichier fichier) {
         if (mainActivity.boot) {
-            if (mainActivity.user.lancerXCTrackBoot()) {
-                lancerXCTrack();
-            }
+            //if (mainActivity.user.lancerXCTrackBoot()) {
+            //    lancerXCTrack();
+            //}
             mainActivity.getIntent().putExtra(Util.BOOT, false);
             mainActivity.finish();
         }
@@ -163,11 +160,11 @@ public class LaunchManager {
     }
 
     @SuppressLint("LogNotTimber")
-    public void traitementLorsDuBoot(Intent intent) {
+    public void traitementLorsDuBoot(Intent intent, boolean downloadFichierOpenAir, boolean lancerXCTrackBoot) {
         Log.i("MonLog", "Trt lors du boot");
-        if (mainActivity.user.downloadFichierOpenAir()) {
+        if (downloadFichierOpenAir) {
             downloadListeFichiersOpenAir();
-        } else if (mainActivity.user.lancerXCTrackBoot()) {
+        } else if (lancerXCTrackBoot) {
             lancerXCTrack();
         }
         mainActivity.finish();
@@ -183,13 +180,11 @@ public class LaunchManager {
         mainActivity.startActivity(intent);
     }
 
-    public void chooseAccount() {
-        if (mainActivity.user.getUser() == null
-                || mainActivity.user.getToken() == null) {
+    public void chooseAccount(boolean downloadFichierOpenAir, boolean userHasAccount) {
+        if (downloadFichierOpenAir && !userHasAccount) {
             mainActivity.chooseAccount();
         }
     }
-
     public boolean isAppInstalled(String packageName) {
         try {
             mainActivity.getPackageManager().getApplicationInfo(packageName, 0);
@@ -198,10 +193,12 @@ public class LaunchManager {
             return false;
         }
     }
-    public void setMenuItemsDownload(Menu menu) {
-        menu.getItem(2).setVisible(mainActivity.user.downloadFichierOpenAir());
-        menu.getItem(3).setVisible(mainActivity.user.downloadFichierOpenAir());
+
+    public void setMenuItemsDownload(Menu menu, boolean downloadFichierOpenAir) {
+        menu.getItem(2).setVisible(downloadFichierOpenAir);
+        menu.getItem(3).setVisible(downloadFichierOpenAir);
     }
+
     public void lancerXCGuide() {
         Intent launchIntent = mainActivity.getPackageManager().getLaunchIntentForPackage("indysoft.xc_guide");
         if (launchIntent != null) {

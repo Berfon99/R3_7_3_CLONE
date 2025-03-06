@@ -23,12 +23,14 @@ public class MainActivity extends CommonActivity {
     private Menu menu;
     private LaunchManager launchManager;
     private DataStorageManager dataStorageManager;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         launchManager = new LaunchManager(this);
+        user = User.getInstance(this);
         if (!Settings.canDrawOverlays(this)) {
             launchManager.requestPermission();
         }
@@ -67,7 +69,7 @@ public class MainActivity extends CommonActivity {
             notificationDateFichier = intent.getBooleanExtra(Util.NOTIFICATION_DATE_FICHIER, false);
         }
         if (boot)
-            launchManager.traitementLorsDuBoot(intent);
+            launchManager.traitementLorsDuBoot(intent, user.downloadFichierOpenAir(), user.lancerXCTrackBoot());
         else if (notificationAccesInternet)
             afficherMessageAccesInternet();
         else if (notificationDateFichier) {
@@ -85,7 +87,6 @@ public class MainActivity extends CommonActivity {
         imageXCGuideLaunch.setOnClickListener(v -> launchManager.lancerXCGuide());
         imageCheckForUpgrades.setOnClickListener(v -> launchManager.afficherDialogueUpgrades());
     }
-
     private void setActionBarTitleWithSelectedModel() {
         String selectedModel = dataStorageManager.getSelectedModel();
         String finalSelectedModel = selectedModel.isEmpty() ? Build.MODEL : selectedModel;
@@ -109,10 +110,9 @@ public class MainActivity extends CommonActivity {
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        launchManager.setMenuItemsDownload(menu);
+        launchManager.setMenuItemsDownload(menu, user.downloadFichierOpenAir());
         return true;
     }
-
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -171,7 +171,7 @@ public class MainActivity extends CommonActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PREFERENCES) {
-            launchManager.chooseAccount();
+            launchManager.chooseAccount(user.downloadFichierOpenAir(), user.getUser() != null && user.getToken() != null);
         } else if (requestCode == MainActivity.LISTE) {
             if (resultCode == ListActivity.PAS_ACCES_INTERNET) {
                 afficherMessageAccesInternet();
@@ -184,7 +184,6 @@ public class MainActivity extends CommonActivity {
             }
         }
     }
-
     @Override
     protected void finDemandeAccessFichiers() {
     }
@@ -202,6 +201,7 @@ public class MainActivity extends CommonActivity {
     public void afficherMessageWarning(Fichier fichier) {
         launchManager.afficherMessageWarning(fichier);
     }
+
     void afficherAttente() {
         launchManager.afficherAttente();
     }
