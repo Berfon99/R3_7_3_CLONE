@@ -1,88 +1,181 @@
 package com.xc.r3;
 
-import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class PreferencesActivity extends AppCompatActivity {
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switchXCTrackBoot;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switchDownload;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switchDelayXCTrackOnBoot;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switchDownloadOnBoot;
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     private Switch switchDanger;
     private User user;
-    private AccountManager accountManager;
+
+    private Spinner modelSpinner;
+    private TextView linkTextView;
+    private Button buttonConfirm;
+    private String deviceName;
+    private List<String> modelList;
+    private DataStorageManager dataStorageManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preferences);
-        ActionBar actionBar = getSupportActionBar();  //Make sure you are extending ActionBarActivity
+        ActionBar actionBar = getSupportActionBar();
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        this.user = User.getInstance(this);
-        this.switchXCTrackBoot = findViewById(R.id.switch_xctrack);
-        this.switchDelayXCTrackOnBoot = findViewById(R.id.switch_xctrack_delay);
-        this.switchDownloadOnBoot = findViewById(R.id.switch_download_on_boot);
-        this.switchDownload = findViewById(R.id.switch_download);
-        this.switchDanger = findViewById(R.id.switch_danger);
-        this.switchXCTrackBoot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                setSwitchDelayXCTrackOnBoot();
-            }
-        });
-        this.switchDownload.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                setSwitchesDownload();
-            }
-        });
+
+        // Initialize DataStorageManager and User
+        dataStorageManager = DataStorageManager.getInstance(this);
+        user = User.getInstance(this);
+
+        // Initialize Switches
+        switchXCTrackBoot = findViewById(R.id.switch_xctrack);
+        switchDelayXCTrackOnBoot = findViewById(R.id.switch_xctrack_delay);
+        switchDownloadOnBoot = findViewById(R.id.switch_download_on_boot);
+        switchDownload = findViewById(R.id.switch_download);
+        switchDanger = findViewById(R.id.switch_danger);
+
+        // Initialize Model Selection UI
+        modelSpinner = findViewById(R.id.model_spinner);
+        linkTextView = findViewById(R.id.linkTextView);
+        buttonConfirm = findViewById(R.id.button_confirm);
+
+        // Setup Model Selection
+        setupModelSelection();
+
+        // Setup Switch Listeners
+        switchXCTrackBoot.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchDelayXCTrackOnBoot());
+        switchDownload.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchesDownload());
+
+        // Initialize Switch States
         initSwitches();
     }
 
+    private void setupModelSelection() {
+        // Get the allowed models from DataStorageManager
+        List<String> allowedModels = dataStorageManager.getAllowedModels();
+
+        // Get the device name
+        deviceName = getDeviceName();
+
+        // Create the modelList
+        modelList = new ArrayList<>();
+        modelList.addAll(allowedModels);
+        modelList.add("Device name: " + deviceName);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, modelList);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        modelSpinner.setAdapter(adapter);
+
+        // Set the default selection
+        String selectedModel = dataStorageManager.getSelectedModel();
+        if (!selectedModel.isEmpty()) {
+            modelSpinner.setSelection(modelList.indexOf(selectedModel));
+        } else if (allowedModels.contains(Build.MODEL)) {
+            modelSpinner.setSelection(modelList.indexOf(Build.MODEL));
+        } else {
+            modelSpinner.setSelection(modelList.indexOf("Device name: " + deviceName));
+        }
+
+        // Set the click listener for the linkTextView
+        linkTextView.setOnClickListener(v -> {
+            String url = "https://www.fly-air3.com/ufaqs/which-version-of-air3-is-it/";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            startActivity(intent);
+        });
+
+        // Set the click listener for the buttonConfirm
+        buttonConfirm.setOnClickListener(v -> {
+            // Create a new variable inside the lambda
+            String selectedModelInLambda = modelSpinner.getSelectedItem().toString();
+            if (selectedModelInLambda.equals("Device name: " + deviceName)) {
+                showDeviceNameConfirmationDialog(deviceName);
+            } else {
+                dataStorageManager.saveSelectedModel(selectedModelInLambda);
+            }
+        });
+    }
     private void initSwitches() {
-        this.switchXCTrackBoot.setChecked(this.user.lancerXCTrackBoot());
+        switchXCTrackBoot.setChecked(user.lancerXCTrackBoot());
         setSwitchDelayXCTrackOnBoot();
-        this.switchDelayXCTrackOnBoot.setChecked(this.user.delayXCTrackOnBoot());
-        this.switchDownload.setChecked(this.user.downloadFichierOpenAir());
+        switchDelayXCTrackOnBoot.setChecked(user.delayXCTrackOnBoot());
+        switchDownload.setChecked(user.downloadFichierOpenAir());
         setSwitchesDownload();
     }
 
     private void setSwitchDelayXCTrackOnBoot() {
-        if (this.switchXCTrackBoot.isChecked()) {
-            this.switchDelayXCTrackOnBoot.setEnabled(true);
-            this.switchDelayXCTrackOnBoot.setChecked(this.user.delayXCTrackOnBoot());
-        } else {
-            this.switchDelayXCTrackOnBoot.setEnabled(false);
-            this.switchDelayXCTrackOnBoot.setChecked(false);
-        }
+        switchDelayXCTrackOnBoot.setEnabled(switchXCTrackBoot.isChecked());
+        switchDelayXCTrackOnBoot.setChecked(switchXCTrackBoot.isChecked() && user.delayXCTrackOnBoot());
     }
 
     private void setSwitchesDownload() {
-        if (this.switchDownload.isChecked()) {
-            this.switchDownloadOnBoot.setEnabled(true);
-            this.switchDownloadOnBoot.setChecked(this.user.downloadFichierOpenAirOnBoot());
-            this.switchDanger.setEnabled(true);
-            this.switchDanger.setChecked(this.user.getDangerous());
+        switchDownloadOnBoot.setEnabled(switchDownload.isChecked());
+        switchDownloadOnBoot.setChecked(switchDownload.isChecked() && user.downloadFichierOpenAirOnBoot());
+        switchDanger.setEnabled(switchDownload.isChecked());
+        switchDanger.setChecked(switchDownload.isChecked() && user.getDangerous());
+    }
 
+    private void showDeviceNameConfirmationDialog(String deviceName) {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.device_name_confirmation_title))
+                .setMessage(getString(R.string.device_name_confirmation_message))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                    dataStorageManager.saveSelectedModel(deviceName);
+                })
+                .setNegativeButton(getString(R.string.no), (dialog, which) -> {
+                    // Reset the spinner to the default selection
+                    if (dataStorageManager.getAllowedModels().contains(Build.MODEL)) {
+                        modelSpinner.setSelection(modelList.indexOf(Build.MODEL));
+                    } else {
+                        modelSpinner.setSelection(modelList.indexOf("Device name: " + deviceName));
+                    }
+                })
+                .setCancelable(false)
+                .show();
+    }
+    private String getDeviceName() {
+        String manufacturer = Build.MANUFACTURER;
+        String model = Build.MODEL;
+        if (model.startsWith(manufacturer)) {
+            return capitalize(model);
         } else {
-            this.switchDownloadOnBoot.setEnabled(false);
-            this.switchDownloadOnBoot.setChecked(false);
-            this.switchDanger.setEnabled(false);
-            this.switchDanger.setChecked(false);
+            return capitalize(manufacturer) + " " + model;
+        }
+    }
+
+    private String capitalize(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+        char first = s.charAt(0);
+        if (Character.isUpperCase(first)) {
+            return s;
+        } else {
+            return Character.toUpperCase(first) + s.substring(1);
         }
     }
 
@@ -93,18 +186,18 @@ public class PreferencesActivity extends AppCompatActivity {
     }
 
     private void sauver() {
-        boolean bootXCtrack = this.switchXCTrackBoot.isChecked();
-        boolean delayXCtrackOnBoot = this.switchDelayXCTrackOnBoot.isChecked();
-        boolean download = this.switchDownload.isChecked();
-        boolean downloadOnBoot = this.switchDownloadOnBoot.isChecked();
-        boolean danger = this.switchDanger.isChecked();
-        this.user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, downloadOnBoot, danger);
+        boolean bootXCtrack = switchXCTrackBoot.isChecked();
+        boolean delayXCtrackOnBoot = switchDelayXCTrackOnBoot.isChecked();
+        boolean download = switchDownload.isChecked();
+        boolean downloadOnBoot = switchDownloadOnBoot.isChecked();
+        boolean danger = switchDanger.isChecked();
+        user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, downloadOnBoot, danger);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();    //Call the back button's method
+            onBackPressed();
             return true;
         }
         return super.onOptionsItemSelected(item);
