@@ -4,7 +4,7 @@ ext {
     support_version = "29.0.0"
 }
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     defaultConfig {
         applicationId "com.xc.r3"
         minSdkVersion 27
