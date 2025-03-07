@@ -27,11 +27,13 @@ android {
             storePassword 'android'
         }
     }
+
+
     compileOptions {
-        sourceCompatibility = '1.8'
-        targetCompatibility = '1.8'
+        sourceCompatibility JavaVersion.VERSION_19
+        targetCompatibility JavaVersion.VERSION_19
     }
-    buildTypes {
+        buildTypes {
         debug {
             signingConfig signingConfigs.key
         }
