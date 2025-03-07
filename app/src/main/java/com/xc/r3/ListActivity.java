@@ -82,7 +82,7 @@ public class ListActivity extends CommonActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void afficherMessage(String message, String titre, int typeIcone) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.envoyer, (dialog, id) -> ListActivity.this.downloaderFichierSelectionne());

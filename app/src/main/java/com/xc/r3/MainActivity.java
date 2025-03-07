@@ -117,27 +117,22 @@ public class MainActivity extends CommonActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        switch (id) {
-            case R.id.action_settings:
-                launchManager.afficherDialoguePreferences();
-                break;
-            case R.id.action_interfaces:
-                lancerInterfaceActivity();
-                break;
-            case R.id.action_download_fichier:
-                launchManager.downloadListeFichiersOpenAir();
-                break;
-            case R.id.action_liste_fichiers:
-                Intent intent = new Intent(this, ListActivity.class);
-                startActivityForResult(intent, MainActivity.LISTE);
-                break;
-            case R.id.action_upgrades:
-                launchManager.afficherDialogueUpgrades();
-                break;
-            case R.id.action_about:
-                launchManager.afficherAbout();
-                break;
+
+        if (id == R.id.action_settings) {
+            launchManager.afficherDialoguePreferences();
+        } else if (id == R.id.action_interfaces) {
+            lancerInterfaceActivity();
+        } else if (id == R.id.action_download_fichier) {
+            launchManager.downloadListeFichiersOpenAir();
+        } else if (id == R.id.action_liste_fichiers) {
+            Intent intent = new Intent(this, ListActivity.class);
+            startActivityForResult(intent, MainActivity.LISTE);
+        } else if (id == R.id.action_upgrades) {
+            launchManager.afficherDialogueUpgrades();
+        } else if (id == R.id.action_about) {
+            launchManager.afficherAbout();
         }
+
         return super.onOptionsItemSelected(item);
     }
 

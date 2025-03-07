@@ -137,7 +137,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     public void afficherMessageDemandeAccesFichiersPartages() {
         String message = getString(R.string.demande_acces);
         String titre = getString(R.string.titre_demande_acces);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.bouton_demande, (dialog, id) -> CommonActivity.this.afficherDemandeConfirmationEnvoieDemandeAcces());
@@ -179,7 +179,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     private void afficherMessageBienEnvoye() {
         String message = getString(R.string.message_envoye);
         String titre = getString(R.string.titre_message_envoye);
-        AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(android.R.string.ok, (dialog, id) -> {
@@ -194,7 +194,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     public void afficherDemandeConfirmationEnvoieDemandeAcces() {
         String message = getString(R.string.confirmer_demande_acces);
         String titre = getString(R.string.titre_confirmer_demande_acces);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.titre_confirmer_demande_acces, (dialog, id) -> CommonActivity.this.executerEnvoyerDemandeAcces());
@@ -210,7 +210,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     public void afficherMessageDemandePermissions() {
         String message = getString(R.string.demande_acces_contacts);
         String titre = getString(R.string.titre_demande_acces_contacts);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.bouton_demande_acces_contacts, (dialog, id) -> ActivityCompat.requestPermissions(CommonActivity.this,
@@ -301,7 +301,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     public void afficherMessageErreurAccesFichier() {
         String titre = this.getString(android.R.string.dialog_alert_title);
         String message = getString(R.string.erreur_acces_via_bouton);
-        android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage(message);
         alert.setPositiveButton(getString(R.string.bouton_website), (dialog, id) -> lancerNavigateurAccesGoogleDrive());
@@ -339,7 +339,7 @@ public abstract class CommonActivity extends AppCompatActivity {
     public void afficherMessageAccesInternet() {
         String titre = this.getString(android.R.string.dialog_alert_title);
         String message = getString(R.string.erreur_internet);
-        android.app.AlertDialog.Builder alert = new android.app.AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage(message);
         alert.setPositiveButton(android.R.string.ok, (dialog, which) -> {

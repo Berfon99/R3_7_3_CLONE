@@ -58,7 +58,7 @@ public class LaunchManager {
     private void afficherMessageInstallationAir3Upgrader() {
         String titre = mainActivity.getString(R.string.titre_installation_upgrader);
         String message = mainActivity.getString(R.string.message_installation_upgrader);
-        AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.bouton_download, (dialog, id) -> lancerNavigateur(AIR3_UPGRADER_DOWNLOAD_URL));
@@ -131,7 +131,7 @@ public class LaunchManager {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void afficherMessage(String message, String titre, int typeIcone) {
-        AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         if (typeIcone == CommonActivity.ICONE_APPLICATION)
@@ -146,7 +146,7 @@ public class LaunchManager {
         // la date dans le nom du fichier n'est pas la date du jour
         String titre = mainActivity.getString(R.string.fichier) + " : " + fichier.getName();
         String message = mainActivity.getString(R.string.mauvaise_date) + "\n\n" + mainActivity.getString(R.string.sauver_fichier);
-        AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.envoyer, (dialog, id) -> mainActivity.lancerRequete(AsyncCallWS.DOWNLOADER, fichier));

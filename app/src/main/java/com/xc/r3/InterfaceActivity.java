@@ -160,7 +160,7 @@ public class InterfaceActivity extends CommonActivity {
     public void afficherMessageConfirmationInterface(View view) {
         String message = getString(R.string.confirmer_interface);
         String titre = getString(R.string.titre_interface);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.change, (dialog, id) -> InterfaceActivity.this.executerChangementInterface());
@@ -201,7 +201,7 @@ public class InterfaceActivity extends CommonActivity {
     public void afficherMessageConfirmationReset() {
         String message = getString(R.string.confirmer_reset);
         String titre = getString(R.string.titre_reset);
-        AlertDialog.Builder alert = new AlertDialog.Builder(this, R.style.Theme_AppCompat_Light_Dialog_MinWidth);
+        AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.reset_interface, (dialog, id) -> InterfaceActivity.this.executerResetInterface());
