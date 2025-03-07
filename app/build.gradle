@@ -7,7 +7,7 @@ android {
     compileSdkVersion 31
     defaultConfig {
         applicationId "com.xc.r3"
-        minSdkVersion 31
+        minSdkVersion 27
         targetSdkVersion 34
         versionCode 2163
         versionName "2.16.3" //new interface
