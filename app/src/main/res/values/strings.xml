@@ -78,7 +78,7 @@
     <string name="xcguide_launch">XC Guide Launch</string>
     <string name="check_for_upgrades">Check for Upgrades</string>
     <string name="brand_error_message">This app is only compatible with AIR3 devices.</string>
-    <string name="ok">OK</string>
+    <string name="confirm">Confirm</string>
     <string name="select_device">Select your device</string>
     <string name="what_is_my_air3_version">What is my AIR3 version?</string>
     <string name="device_name_confirmation_title">Confirm Device Name</string>
