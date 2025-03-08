@@ -32,7 +32,9 @@ public class InterfaceActivity extends CommonActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Timber.d("InterfaceActivity onCreate start");
         super.onCreate(savedInstanceState);
+        try {
         setContentView(R.layout.activity_interface);
         ActionBar actionBar = getSupportActionBar();  //Make sure you are extending ActionBarActivity
         Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
@@ -46,7 +48,11 @@ public class InterfaceActivity extends CommonActivity {
 
         initIconesThemes();
         initSpinnerTheme();
+        Timber.d("InterfaceActivity onCreate completed successfully");
+    } catch (Exception e) {
+        Timber.e(e, "Error in InterfaceActivity onCreate");
     }
+}
 
     @Override
     protected void finDemandeAccessFichiers() {
@@ -119,6 +125,10 @@ public class InterfaceActivity extends CommonActivity {
         try {
             int indiceMode = this.spinnerMode.getSelectedItemPosition();
             int indiceTheme = this.spinnerTheme.getSelectedItemPosition();
+            if (configuration == null) {
+                Timber.e("Configuration is null");
+                return;
+            }
             ItemInterface mode = configuration.getMode(indiceMode);
             ItemInterface theme = configuration.getTheme(indiceTheme);
             nomImage = IMAGE_PATH + mode.getId() + "_" + theme.getId() + ".png";
@@ -134,7 +144,6 @@ public class InterfaceActivity extends CommonActivity {
     protected void onPause() {
         super.onPause();
         sauver();
-        finish();
     }
 
     private void sauver() {

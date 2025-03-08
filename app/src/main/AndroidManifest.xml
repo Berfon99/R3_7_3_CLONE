@@ -80,7 +80,13 @@
 
         <activity android:name=".PreferencesActivity" />
         <activity android:name=".ListActivity" />
-        <activity android:name=".InterfaceActivity" />
+        <activity
+            android:name=".InterfaceActivity"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
         <activity
             android:name=".AboutActivity"
             android:exported="false" />

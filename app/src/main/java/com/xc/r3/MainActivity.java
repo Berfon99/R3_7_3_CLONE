@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -97,10 +98,16 @@ public class MainActivity extends CommonActivity {
     }
 
     private void lancerInterfaceActivity() {
-        Intent intent = new Intent(this, InterfaceActivity.class);
-        startActivity(intent);
+        try {
+            Timber.d("Attempting to launch InterfaceActivity");
+            Intent intent = new Intent(this, InterfaceActivity.class);
+            startActivity(intent);
+            Timber.d("InterfaceActivity started successfully");
+        } catch (Exception e) {
+            Timber.e(e, "Error launching InterfaceActivity");
+            Toast.makeText(this, "Error launching Interface: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
