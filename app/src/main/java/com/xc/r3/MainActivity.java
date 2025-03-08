@@ -25,6 +25,7 @@ public class MainActivity extends CommonActivity {
     private DataStorageManager dataStorageManager;
     private User user;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +94,15 @@ public class MainActivity extends CommonActivity {
         String androidVersion = Build.VERSION.RELEASE;
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("AIR³ Manager - " + finalSelectedModel + " - Android " + androidVersion);
+        }
+    }
+
+    private void setActionBarTitleWithSelectedModel() {
+        String selectedModel = dataStorageManager.getSelectedModel();
+        String finalSelectedModel = selectedModel.isEmpty() ? Build.MODEL : selectedModel;
+        String androidVersion = Build.VERSION.RELEASE;
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("AIR³ Upgrader - " + finalSelectedModel + " - Android " + androidVersion);
         }
     }
 
