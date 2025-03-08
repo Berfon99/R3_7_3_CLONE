@@ -17,8 +17,7 @@ public class AppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.app_widget);
-        views.setInt(R.id.widget_layout, "setBackgroundColor", Color.BLACK);
-
+        views.setInt(R.id.widget_layout, "setBackgroundColor", Color.TRANSPARENT);
         // XCTrack
         Intent intent = context.getPackageManager().getLaunchIntentForPackage("org.xcontest.XCTrack");
 //        PendingIntent pendingIntentXCTrack = PendingIntent.getActivity(context, 0, intentXCTrack, PendingIntent.FLAG_UPDATE_CURRENT);
