@@ -87,6 +87,6 @@
     <string name="no">No</string>
     <string name="unknown_device">Unknown device</string>
     <string name="ok">Ok</string>
-    <string name="change_profile">Change profile</string>
-    <string name="or_reset">Or reset</string>
+    <string name="change_profile">- Change profile</string>
+    <string name="or_reset">- Or reset</string>
 </resources>

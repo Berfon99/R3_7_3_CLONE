@@ -24,8 +24,6 @@ public class InterfaceActivity extends CommonActivity {
     private User user;
     private Spinner spinnerMode;
     private int[] iconesModes;
-    private ImageView image;
-    private ViewChangeInterface vueChangeInterface;
     private Configuration configuration;
     private DataStorageManager dataStorageManager;
     private ModelConfiguration modelConfiguration;
@@ -103,12 +101,9 @@ public class InterfaceActivity extends CommonActivity {
                 return;
             }
             ItemInterface mode = modelConfiguration.getMode(indiceMode);
-            //ItemInterface theme = configuration.getTheme(indiceTheme);
-            //nomImage = IMAGE_PATH + mode.getId() + "_" + theme.getId() + ".png";
             nomImage = IMAGE_PATH + mode.getId() + ".png";
             InputStream in = getAssets().open(nomImage);
             Drawable drawable = Drawable.createFromStream(in, null);
-            this.image.setImageDrawable(drawable);
         } catch (Exception ex) {
             Timber.e("erreur chargement image : %s", nomImage);
         }
@@ -140,26 +135,19 @@ public class InterfaceActivity extends CommonActivity {
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void afficherMessageConfirmationInterface(View view) {
-        String message = getString(R.string.confirmer_interface);
+        String message = getString(R.string.confirmer_reset);
         String titre = getString(R.string.titre_interface);
         AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
         alert.setTitle(titre);
         alert.setMessage("\n" + message);
         alert.setPositiveButton(R.string.change, (dialog, id) -> InterfaceActivity.this.executerChangementInterface());
         alert.setNegativeButton(R.string.annuler, (dialog, which) -> dialog.dismiss());
-        String mode = this.spinnerMode.getSelectedItem().toString();
-        //String theme = this.spinnerTheme.getSelectedItem().toString();
-        vueChangeInterface = new ViewChangeInterface(this, mode, "");
-        alert.setView(vueChangeInterface);
         alert.setIcon(getDrawable(R.drawable.ic_warning));
         alert.show();
     }
 
     private void executerChangementInterface() {
-        if (this.vueChangeInterface.isModeChecked())
-            changeMode();
-        //if (this.vueChangeInterface.isThemeChecked())
-        //    changeTheme();
+        changeMode();
         this.gestionFichiers.copierFichierHyperPilotBiggerCities(); // Noms des villes en plus grand
     }
 
