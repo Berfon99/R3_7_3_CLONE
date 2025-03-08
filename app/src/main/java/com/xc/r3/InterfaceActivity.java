@@ -23,36 +23,36 @@ public class InterfaceActivity extends CommonActivity {
     private static final String IMAGE_PATH = "images/";
     private User user;
     private Spinner spinnerMode;
-    private Spinner spinnerTheme;
     private int[] iconesModes;
-    private int[] iconesThemes;
     private ImageView image;
     private ViewChangeInterface vueChangeInterface;
     private Configuration configuration;
+    private DataStorageManager dataStorageManager;
+    private ModelConfiguration modelConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Timber.d("InterfaceActivity onCreate start");
         super.onCreate(savedInstanceState);
         try {
-        setContentView(R.layout.activity_interface);
-        ActionBar actionBar = getSupportActionBar();  //Make sure you are extending ActionBarActivity
-        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        this.image = findViewById(R.id.imageView);
-        this.user = User.getInstance(this);
-        this.configuration = GestionFichiers.lireConfiguration(this);
+            setContentView(R.layout.activity_interface);
+            ActionBar actionBar = getSupportActionBar();  //Make sure you are extending ActionBarActivity
+            Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            this.user = User.getInstance(this);
+            this.configuration = GestionFichiers.lireConfiguration(this);
+            this.dataStorageManager = DataStorageManager.getInstance(this);
+            String selectedModel = dataStorageManager.getSelectedModel();
+            this.modelConfiguration = configuration.getModelConfiguration(selectedModel);
 
-        initIconesModes();
-        initSpinnerMode();
+            initIconesModes();
+            initSpinnerMode();
 
-        initIconesThemes();
-        initSpinnerTheme();
-        Timber.d("InterfaceActivity onCreate completed successfully");
-    } catch (Exception e) {
-        Timber.e(e, "Error in InterfaceActivity onCreate");
+            Timber.d("InterfaceActivity onCreate completed successfully");
+        } catch (Exception e) {
+            Timber.e(e, "Error in InterfaceActivity onCreate");
+        }
     }
-}
 
     @Override
     protected void finDemandeAccessFichiers() {
@@ -72,19 +72,12 @@ public class InterfaceActivity extends CommonActivity {
         this.iconesModes[4] = R.drawable.mode_balloon;
     }
 
-    private void initIconesThemes() {
-        this.iconesThemes = new int[3];
-        this.iconesThemes[0] = R.drawable.theme_black;
-        this.iconesThemes[1] = R.drawable.theme_white;
-        this.iconesThemes[2] = R.drawable.theme_e_ink;
-    }
-
     private void initSpinnerMode() {
         SpinnerAdapterAir3 adapterMode;
         if (screenIsSmall())
-            adapterMode = new SpinnerAdapterAir3(this, this.iconesModes, configuration.getLibellesModesCourts());
+            adapterMode = new SpinnerAdapterAir3(this, this.iconesModes, modelConfiguration.getLibellesModesCourts());
         else
-            adapterMode = new SpinnerAdapterAir3(this, this.iconesModes, configuration.getLibellesModesLongs());
+            adapterMode = new SpinnerAdapterAir3(this, this.iconesModes, modelConfiguration.getLibellesModesLongs());
         this.spinnerMode = findViewById(R.id.spinnerMode);
         this.spinnerMode.setAdapter(adapterMode);
         int indiceMode = this.user.chargerPreferenceMode();
@@ -101,37 +94,18 @@ public class InterfaceActivity extends CommonActivity {
         });
     }
 
-    private void initSpinnerTheme() {
-        // adapter theme
-        SpinnerAdapterAir3 adapterTheme = new SpinnerAdapterAir3(this, this.iconesThemes, configuration.getLibellesThemes());
-        this.spinnerTheme = findViewById(R.id.spinnerTheme);
-        this.spinnerTheme.setAdapter(adapterTheme);
-        int indiceTheme = this.user.chargerPreferenceTheme();
-        this.spinnerTheme.setSelection(indiceTheme);
-        this.spinnerTheme.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                InterfaceActivity.this.modifierImage();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-    }
-
     private void modifierImage() {
         String nomImage = "";
         try {
             int indiceMode = this.spinnerMode.getSelectedItemPosition();
-            int indiceTheme = this.spinnerTheme.getSelectedItemPosition();
             if (configuration == null) {
                 Timber.e("Configuration is null");
                 return;
             }
-            ItemInterface mode = configuration.getMode(indiceMode);
-            ItemInterface theme = configuration.getTheme(indiceTheme);
-            nomImage = IMAGE_PATH + mode.getId() + "_" + theme.getId() + ".png";
+            ItemInterface mode = modelConfiguration.getMode(indiceMode);
+            //ItemInterface theme = configuration.getTheme(indiceTheme);
+            //nomImage = IMAGE_PATH + mode.getId() + "_" + theme.getId() + ".png";
+            nomImage = IMAGE_PATH + mode.getId() + ".png";
             InputStream in = getAssets().open(nomImage);
             Drawable drawable = Drawable.createFromStream(in, null);
             this.image.setImageDrawable(drawable);
@@ -148,8 +122,7 @@ public class InterfaceActivity extends CommonActivity {
 
     private void sauver() {
         int indiceMode = this.spinnerMode.getSelectedItemPosition();
-        int indiceTheme = this.spinnerTheme.getSelectedItemPosition();
-        this.user.setPreferencesInterface(indiceMode, indiceTheme);
+        this.user.setPreferencesInterface(indiceMode, 0);
     }
 
     @Override
@@ -175,8 +148,8 @@ public class InterfaceActivity extends CommonActivity {
         alert.setPositiveButton(R.string.change, (dialog, id) -> InterfaceActivity.this.executerChangementInterface());
         alert.setNegativeButton(R.string.annuler, (dialog, which) -> dialog.dismiss());
         String mode = this.spinnerMode.getSelectedItem().toString();
-        String theme = this.spinnerTheme.getSelectedItem().toString();
-        vueChangeInterface = new ViewChangeInterface(this, mode, theme);
+        //String theme = this.spinnerTheme.getSelectedItem().toString();
+        vueChangeInterface = new ViewChangeInterface(this, mode, "");
         alert.setView(vueChangeInterface);
         alert.setIcon(getDrawable(R.drawable.ic_warning));
         alert.show();
@@ -185,24 +158,16 @@ public class InterfaceActivity extends CommonActivity {
     private void executerChangementInterface() {
         if (this.vueChangeInterface.isModeChecked())
             changeMode();
-        if (this.vueChangeInterface.isThemeChecked())
-            changeTheme();
+        //if (this.vueChangeInterface.isThemeChecked())
+        //    changeTheme();
         this.gestionFichiers.copierFichierHyperPilotBiggerCities(); // Noms des villes en plus grand
-    }
-
-    private void changeTheme() {
-        String message = getString(R.string.changement_interface_termine);
-        int indice = this.spinnerTheme.getSelectedItemPosition();
-        String nomFichier = configuration.getTheme(indice).getXcbs();
-        String id = configuration.getTheme(indice).getId();
-        copierFichierBootstrap(id, nomFichier, message);
     }
 
     private void changeMode() {
         String message = getString(R.string.changement_interface_termine);
         int indice = this.spinnerMode.getSelectedItemPosition();
-        String nomFichier = configuration.getMode(indice).getXcbs();
-        String id = configuration.getMode(indice).getId();
+        String nomFichier = modelConfiguration.getMode(indice).getXcbs();
+        String id = modelConfiguration.getMode(indice).getId();
         copierFichierBootstrap(id, nomFichier, message);
     }
 
@@ -221,7 +186,7 @@ public class InterfaceActivity extends CommonActivity {
 
     private void executerResetInterface() {
         String message = getString(R.string.reset_termine);
-        String nomFichier = configuration.getReset();
+        String nomFichier = modelConfiguration.getReset();
         copierFichierBootstrap("reset", nomFichier, message);
         this.gestionFichiers.copierFichierHyperPilotBiggerCities();
     }

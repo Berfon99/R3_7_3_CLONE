@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeSet;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -266,18 +268,28 @@ public class GestionFichiers {
                 sb.append(mLine);
             }
             JSONObject jsonObject = new JSONObject(sb.toString());
-            String version = jsonObject.get("version").toString();
-            String reset = jsonObject.get("reset").toString();
-            List<ItemInterface> modes = construireListe(jsonObject, "modes");
-            List<ItemInterface> themes = construireListe(jsonObject, "themes");
-            configuration.setVersion(version);
-            configuration.setReset(reset);
-            configuration.setModes(modes);
-            configuration.setThemes(themes);
+            Map<String, ModelConfiguration> models = new HashMap<>();
+            DataStorageManager dataStorageManager = DataStorageManager.getInstance(activity);
+            for (String modelName : dataStorageManager.getAllowedModels()) {
+                if (jsonObject.has(modelName)) {
+                    JSONObject jsonModel = jsonObject.getJSONObject(modelName);
+                    ModelConfiguration modelConfiguration = construireModel(jsonModel);
+                    models.put(modelName, modelConfiguration);
+                }
+            }
+            configuration.setModels(models);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return configuration;
+    }
+    private static ModelConfiguration construireModel(JSONObject jsonModel) throws JSONException {
+        ModelConfiguration modelConfiguration = new ModelConfiguration();
+        String reset = jsonModel.getString("reset");
+        modelConfiguration.setReset(reset);
+        List<ItemInterface> modes = construireListe(jsonModel, "modes");
+        modelConfiguration.setModes(modes);
+        return modelConfiguration;
     }
 
     private static List<ItemInterface> construireListe(JSONObject jsonFichier, String clef) throws
@@ -286,11 +298,11 @@ public class GestionFichiers {
         List<ItemInterface> liste = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jo = (JSONObject) jsonArray.get(i);
-            String id = jo.get("id").toString();
-            String libelle = jo.get("libelle").toString();
-            String xcbs = jo.get("xcbs").toString();
+            String id = jo.getString("id");
+            String libelle = jo.getString("libelle");
+            String xcbs = jo.getString("xcbs");
             ItemInterface item = new ItemInterface(id, libelle, xcbs);
-            liste.add(i, item);
+            liste.add(item);
         }
         return liste;
     }
