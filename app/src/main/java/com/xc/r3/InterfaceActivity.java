@@ -156,7 +156,21 @@ public class InterfaceActivity extends CommonActivity {
         int indice = this.spinnerMode.getSelectedItemPosition();
         String nomFichier = modelConfiguration.getMode(indice).getXcbs();
         String id = modelConfiguration.getMode(indice).getId();
-        copierFichierBootstrap(id, nomFichier, message);
+        String modelFolder = modelConfiguration.getFolder();
+        copierFichierBootstrap(modelFolder, id, nomFichier, message);
+    }
+    private void executerResetInterface() {
+        String message = getString(R.string.reset_termine);
+        String nomFichier = modelConfiguration.getReset();
+        String modelFolder = modelConfiguration.getFolder();
+        copierFichierBootstrap(modelFolder, "reset", nomFichier, message);
+        this.gestionFichiers.copierFichierHyperPilotBiggerCities();
+    }
+    private void copierFichierBootstrap(String modelFolder, String id, String nomFichier, String message) {
+        boolean copie = this.gestionFichiers.copyBootstrapFile(modelFolder, id, nomFichier + ".xcbs");
+        if (!copie)
+            message = getString(R.string.erreur_copie);
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -172,17 +186,4 @@ public class InterfaceActivity extends CommonActivity {
         alert.show();
     }
 
-    private void executerResetInterface() {
-        String message = getString(R.string.reset_termine);
-        String nomFichier = modelConfiguration.getReset();
-        copierFichierBootstrap("reset", nomFichier, message);
-        this.gestionFichiers.copierFichierHyperPilotBiggerCities();
-    }
-
-    private void copierFichierBootstrap(String id, String nomFichier, String message) {
-        boolean copie = this.gestionFichiers.copyBootstrapFile(id, nomFichier + ".xcbs");
-        if (!copie)
-            message = getString(R.string.erreur_copie);
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
 }

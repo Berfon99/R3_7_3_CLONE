@@ -2,11 +2,11 @@ package com.xc.r3;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.Map;
 
 public class ModelConfiguration implements Serializable {
     private String reset;
     private List<ItemInterface> modes;
+    private String folder;
 
     public void setReset(String reset) {
         this.reset = reset;
@@ -44,5 +44,12 @@ public class ModelConfiguration implements Serializable {
 
     public ItemInterface getMode(int indiceMode) {
         return this.modes.get(indiceMode);
+    }
+    public String getFolder() {
+        return folder;
+    }
+
+    public void setFolder(String folder) {
+        this.folder = folder;
     }
 }

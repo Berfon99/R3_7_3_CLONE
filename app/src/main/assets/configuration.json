@@ -1,6 +1,7 @@
 {
    "AIR3-7.2": {
-      "reset": "8ERs1F0yaieESSLH2w08wnHrPSJ6s4DYYKgUDt66dF6IPuocxpSQtbhpEO3yDfIAj-l7gKbznkI006prf3ujDA.99.air3",
+      "folder": "AIR3-7.2",
+      "reset": "3fPSXH22HDSbA9pin7BrNVQDjl4uGKFWbjjBiJZ5eDqa_4Su3RiFpC-hpg7T8hZUsaTZaZ5Sf_gtjt99tnFxBQ.99.air3",
       "modes": [
          {
             "id": "kiss",
@@ -30,7 +31,8 @@
       ]
    },
    "AIR3-7.3": {
-      "reset": "8ERs1F0yaieESSLH2w08wnHrPSJ6s4DYYKgUDt66dF6IPuocxpSQtbhpEO3yDfIAj-l7gKbznkI006prf3ujDA.99.air3",
+      "folder": "AIR3-7.3",
+      "reset": "CdvBdCXFSIgfIuHZX66vYDTTZCnuLctT-E1V6LPaFzpc3UVSJk0aT3UHKokVdpwpZpICD8l5GO0lEHQz-8iBDA.99.air3",
       "modes": [
          {
             "id": "kiss",
@@ -60,7 +62,8 @@
       ]
    },
    "AIR3-7.3+": {
-      "reset": "8ERs1F0yaieESSLH2w08wnHrPSJ6s4DYYKgUDt66dF6IPuocxpSQtbhpEO3yDfIAj-l7gKbznkI006prf3ujDA.99.air3",
+      "folder": "AIR3-7.3+",
+      "reset": "aiZHPNvqo_6oEhpY27ZQSoitWWw3AA7rEUSUXDNk4VPPJHQN7B1EvpVLBi3Z8_gGFnFyvHfy_6hGxNBv2nDeDg.99.air3",
       "modes": [
          {
             "id": "kiss",
@@ -90,27 +93,28 @@
       ]
    },
    "AIR3-7.35": {
-      "reset": "8ERs1F0yaieESSLH2w08wnHrPSJ6s4DYYKgUDt66dF6IPuocxpSQtbhpEO3yDfIAj-l7gKbznkI006prf3ujDA.99.air3",
+      "folder": "AIR3-7.35",
+      "reset": "pW5VVB2aScoax-eSYSBCG56Y88bePI6n7Ce66cW8SPK3x4UMU6h91rrp__1oZH9ZUvGwWOaZSqL-cpBzOMpsBA.99.air3",
       "modes": [
          {
             "id": "kiss",
             "libelle": "Kiss : Keep Interface So Simple",
-            "xcbs": "9BvPhfY5-y9azP0jYRwG3MvJ5OHkfK7Sc2Iprw7ReVMIHMawfYGKmmbPnvLMXyIyp-Kvl4HLgMmmqdk83E-EAQ.99.air3"
+            "xcbs": "J3VJjF_HHY8n-m1w0TOdVAkPVX4wuX2GR9VIjYYJrryJFIBD2xueBJ4dg7sF5yOdt7JmF9EhEG1Am_udQ71fCg.99.air3"
          },
          {
             "id": "easy",
             "libelle": "Easy : Leisure",
-            "xcbs": "rYBVumw61lP5V9aIxUIDnUZdVEXQ6e-4AkBXJlezSFNvJp3GP4NdCF-031hhpx3p8-e92_Ash2ZtjFiwfDc9Dg.99.air3"
+            "xcbs": "EmD1oSKaBasw2XVfsyFrUXVGMzVpvbQ2ZapAnzikjKlYINmiGblXFAwfLSXUVCNKSUPJMXr-FORicx3n0C1wBw.99.air3"
          },
          {
             "id": "expert",
             "libelle": "Expert : Competition and XC",
-            "xcbs": "d4VbsLflXAOKkjL6N9KzoOC_qNycpLiYc1pz2wGHnAMf6msw_ZX5JCFtusjJyIbiI4ixWfNNucMF5w5S4W8KCQ.99.air3"
+            "xcbs": "J3VJjF_HHY8n-m1w0TOdVAkPVX4wuX2GR9VIjYYJrryJFIBD2xueBJ4dg7sF5yOdt7JmF9EhEG1Am_udQ71fCg.99.air3"
          },
          {
             "id": "paramotor",
             "libelle": "Paramotor",
-            "xcbs": "6Ipt3jcJxpxeEVgwOltlmHnt9tRDf59AKYDQHRAwhvIDfmkirnvTW-X0JOAnCqJPeCg_41W4RdeouA2087PpCA.99.air3"
+            "xcbs": "J3VJjF_HHY8n-m1w0TOdVAkPVX4wuX2GR9VIjYYJrryJFIBD2xueBJ4dg7sF5yOdt7JmF9EhEG1Am_udQ71fCg.99.air3"
          },
          {
             "id": "balloon",
@@ -120,6 +124,7 @@
       ]
    },
    "AIR3-7.35+": {
+      "folder": "AIR3-7.35+",
       "reset": "8ERs1F0yaieESSLH2w08wnHrPSJ6s4DYYKgUDt66dF6IPuocxpSQtbhpEO3yDfIAj-l7gKbznkI006prf3ujDA.99.air3",
       "modes": [
          {

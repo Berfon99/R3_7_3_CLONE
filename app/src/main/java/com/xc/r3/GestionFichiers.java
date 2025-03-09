@@ -91,10 +91,10 @@ public class GestionFichiers {
     }
 
     @SuppressLint("TimberArgCount")
-    public boolean copyBootstrapFile(String id, String nomFichier) {
+    public boolean copyBootstrapFile(String modelFolder, String id, String nomFichier) {
         boolean copie = true;
         try {
-            creerFichierXcbsEnLocal(id, nomFichier);
+            creerFichierXcbsEnLocal(modelFolder, id, nomFichier);
             sauverFichierDansXCTrack(nomFichier);
         } catch (Exception ex) {
             copie = false;
@@ -104,11 +104,11 @@ public class GestionFichiers {
         return copie;
     }
 
-    private void creerFichierXcbsEnLocal(String id, String nomFichier) throws Exception {
+    private void creerFichierXcbsEnLocal(String modelFolder, String id, String nomFichier) throws Exception {
         InputStream in = null;
         FileOutputStream out = null;
         try {
-            in = activity.getAssets().open(XCBS_PATH + id + "/" + nomFichier);
+            in = activity.getAssets().open(XCBS_PATH + modelFolder + "/" + id + "/" + nomFichier);
             String contenuFichier = CharStreams.toString(new InputStreamReader(
                     in, Charsets.UTF_8));
             creerFichierEnLocal(contenuFichier, nomFichier);
@@ -116,6 +116,16 @@ public class GestionFichiers {
             if (out != null) out.close();
             if (in != null) in.close();
         }
+    }
+    private static ModelConfiguration construireModel(JSONObject jsonModel) throws JSONException {
+        ModelConfiguration modelConfiguration = new ModelConfiguration();
+        String reset = jsonModel.getString("reset");
+        modelConfiguration.setReset(reset);
+        List<ItemInterface> modes = construireListe(jsonModel, "modes");
+        modelConfiguration.setModes(modes);
+        String folder = jsonModel.getString("folder");
+        modelConfiguration.setFolder(folder);
+        return modelConfiguration;
     }
 
     public void gererRepertoireFichiersTemporaires() {
@@ -282,14 +292,6 @@ public class GestionFichiers {
             e.printStackTrace();
         }
         return configuration;
-    }
-    private static ModelConfiguration construireModel(JSONObject jsonModel) throws JSONException {
-        ModelConfiguration modelConfiguration = new ModelConfiguration();
-        String reset = jsonModel.getString("reset");
-        modelConfiguration.setReset(reset);
-        List<ItemInterface> modes = construireListe(jsonModel, "modes");
-        modelConfiguration.setModes(modes);
-        return modelConfiguration;
     }
 
     private static List<ItemInterface> construireListe(JSONObject jsonFichier, String clef) throws
