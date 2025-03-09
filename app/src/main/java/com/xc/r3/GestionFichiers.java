@@ -45,9 +45,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 public class GestionFichiers {
+
+    private static final String XCBS_PATH = "xcbs/";
     private static final String DIR_FICHIERS_TEMP = "temp";
     private static final String ACTION_FILE_COPY = "air3manager.intent.action.FILE_COPY";
-    private static final String XCBS_PATH = "xcbs/";
     private static final String THEME_PATH = "theme/";
     public static final String FICHIER_OA = "MOST_RECENT_OA.txt";
     private static final String FICHIER_HYPERPILOT_BIGGER_CITIES = "hyperpilot-bigger-cities.xml"; // Noms des villes en plus grand
@@ -57,6 +58,7 @@ public class GestionFichiers {
             Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
     private final CommonActivity activity;
+
 
     public GestionFichiers(CommonActivity activity) {
         this.activity = activity;
@@ -90,43 +92,6 @@ public class GestionFichiers {
         }
     }
 
-    @SuppressLint("TimberArgCount")
-    public boolean copyBootstrapFile(String modelFolder, String id, String nomFichier) {
-        boolean copie = true;
-        try {
-            creerFichierXcbsEnLocal(modelFolder, id, nomFichier);
-            sauverFichierDansXCTrack(nomFichier);
-        } catch (Exception ex) {
-            copie = false;
-            Timber.e(ex);
-            Toast.makeText(activity, "erreur lors de la copie fichier bootstrap\n", Toast.LENGTH_LONG).show();
-        }
-        return copie;
-    }
-
-    private void creerFichierXcbsEnLocal(String modelFolder, String id, String nomFichier) throws Exception {
-        InputStream in = null;
-        FileOutputStream out = null;
-        try {
-            in = activity.getAssets().open(XCBS_PATH + modelFolder + "/" + id + "/" + nomFichier);
-            String contenuFichier = CharStreams.toString(new InputStreamReader(
-                    in, Charsets.UTF_8));
-            creerFichierEnLocal(contenuFichier, nomFichier);
-        } finally {
-            if (out != null) out.close();
-            if (in != null) in.close();
-        }
-    }
-    private static ModelConfiguration construireModel(JSONObject jsonModel) throws JSONException {
-        ModelConfiguration modelConfiguration = new ModelConfiguration();
-        String reset = jsonModel.getString("reset");
-        modelConfiguration.setReset(reset);
-        List<ItemInterface> modes = construireListe(jsonModel, "modes");
-        modelConfiguration.setModes(modes);
-        String folder = jsonModel.getString("folder");
-        modelConfiguration.setFolder(folder);
-        return modelConfiguration;
-    }
 
     public void gererRepertoireFichiersTemporaires() {
         File root = new File(this.activity.getApplicationContext().getFilesDir(), DIR_FICHIERS_TEMP);
@@ -140,20 +105,6 @@ public class GestionFichiers {
         }
     }
 
-    private void creerFichierEnLocal(String contenuFichier, String filename) {
-        try {
-            File root = new File(this.activity.getApplicationContext().getFilesDir(), DIR_FICHIERS_TEMP);
-            File file = new File(root, filename);
-            FileWriter writer = new FileWriter(file);
-            writer.write(contenuFichier);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            Toast.makeText(this.activity.getApplicationContext(), "Problems: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            Timber.e(e);
-        }
-    }
-
     public void sauverFichierOpenair(Fichier fichier) {
         this.creerFichierEnLocal(fichier.getContenu(), "MOST_RECENT_OA.txt");
         this.sauverFichierDansXCTrack("MOST_RECENT_OA.txt");
@@ -163,28 +114,6 @@ public class GestionFichiers {
     }
 
     @SuppressLint("BinaryOperationInTimber")
-    private void sauverFichierDansXCTrack(String filename) {
-        File root = new File(this.activity.getFilesDir(), DIR_FICHIERS_TEMP);
-        File requestFile = new File(root, filename);
-        try {
-            Uri fileUri = FileProvider.getUriForFile(
-                    this.activity,
-                    "air3manager.fileprovider",
-                    requestFile);
-            activity.grantUriPermission("org.xcontest.XCTrack", fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            Intent intent = new Intent();
-            intent.setAction(ACTION_FILE_COPY);
-            intent.setDataAndType(fileUri, "text/plain");
-            intent.setComponent(new ComponentName("org.xcontest.XCTrack", "org.xcontest.XCTrack.FileCopyReceiver"));
-            intent.setFlags(
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            activity.sendBroadcast(intent);
-            Timber.i("File uri sended. File name : %s", filename);
-        } catch (IllegalArgumentException e) {
-            Toast.makeText(this.activity, "Problems: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            Timber.e(e);
-        }
-    }
 
     public void verifyStoragePermissions() {
         // Check if we have write permission
@@ -268,6 +197,118 @@ public class GestionFichiers {
         }
     }
 
+    @SuppressLint("TimberArgCount")
+    public boolean copyBootstrapFile(String modelFolder, String id) {
+        boolean copie = true;
+        try {
+            Timber.tag("GestionFichiers").i("copyBootstrapFile called with modelFolder: %s, id: %s", modelFolder, id);
+            String filename = creerFichierXcbsEnLocal(modelFolder, id);
+            sauverFichierDansXCTrack(filename);
+        } catch (Exception ex) {
+            copie = false;
+            Timber.tag("GestionFichiers").e(ex, "Error in copyBootstrapFile");
+            Toast.makeText(activity, "erreur lors de la copie fichier bootstrap\n", Toast.LENGTH_LONG).show();
+        }
+        return copie;
+    }
+
+    private String creerFichierXcbsEnLocal(String modelFolder, String id) throws Exception {
+        InputStream in = null;
+        FileOutputStream out = null;
+        String nomFichier = "";
+        try {
+            Timber.tag("GestionFichiers").i("creerFichierXcbsEnLocal called with modelFolder: %s, id: %s", modelFolder, id);
+            String[] files = activity.getAssets().list(XCBS_PATH + modelFolder + "/" + id);
+            if (files != null && files.length > 0) {
+                nomFichier = files[0];
+                Timber.tag("GestionFichiers").i("File found in assets: %s", nomFichier);
+            } else {
+                Timber.tag("GestionFichiers").e("No file found in assets for modelFolder: %s, id: %s", modelFolder, id);
+                throw new Exception("No file found in assets");
+            }
+            in = activity.getAssets().open(XCBS_PATH + modelFolder + "/" + id + "/" + nomFichier);
+            Timber.tag("GestionFichiers").i("File opened from assets: %s", nomFichier);
+            String contenuFichier = CharStreams.toString(new InputStreamReader(
+                    in, Charsets.UTF_8));
+            Timber.tag("GestionFichiers").i("File content read successfully: %s", nomFichier);
+            creerFichierEnLocal(contenuFichier, nomFichier);
+            Timber.tag("GestionFichiers").i("creerFichierEnLocal called with filename: %s", nomFichier);
+            return nomFichier;
+        } catch (Exception e) {
+            Timber.tag("GestionFichiers").e(e, "Error in creerFichierXcbsEnLocal");
+            throw e;
+        } finally {
+            if (out != null) out.close();
+            if (in != null) in.close();
+        }
+    }
+    private void creerFichierEnLocal(String contenuFichier, String filename) {
+        try {
+            Timber.tag("GestionFichiers").i("creerFichierEnLocal called with filename: %s", filename);
+            File root = new File(this.activity.getApplicationContext().getFilesDir(), DIR_FICHIERS_TEMP);
+            File file = new File(root, filename);
+            FileWriter writer = new FileWriter(file);
+            writer.write(contenuFichier);
+            writer.flush();
+            writer.close();
+            Timber.tag("GestionFichiers").i("File created locally: %s", filename);
+        } catch (IOException e) {
+            Toast.makeText(this.activity.getApplicationContext(), "Problems: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Timber.tag("GestionFichiers").e(e, "Error in creerFichierEnLocal");
+        }
+    }
+    @SuppressLint("BinaryOperationInTimber")
+    private void sauverFichierDansXCTrack(String filename) {
+        File root = new File(this.activity.getFilesDir(), DIR_FICHIERS_TEMP);
+        File requestFile = new File(root, filename);
+        Timber.tag("GestionFichiers").i("sauverFichierDansXCTrack called with filename: %s", filename);
+        if (!requestFile.exists()) {
+            Timber.tag("GestionFichiers").e("File does not exist: %s", requestFile.getAbsolutePath());
+            return;
+        }
+        Timber.tag("GestionFichiers").i("File to copy: %s", requestFile.getAbsolutePath());
+        try {
+            Uri fileUri = FileProvider.getUriForFile(
+                    this.activity,
+                    "air3manager.fileprovider",
+                    requestFile);
+            Timber.tag("GestionFichiers").i("File URI generated: %s", fileUri.toString());
+            activity.grantUriPermission("org.xcontest.XCTrack", fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Intent intent = new Intent();
+            intent.setAction(ACTION_FILE_COPY);
+            intent.setDataAndType(fileUri, "text/plain");
+            intent.setComponent(new ComponentName("org.xcontest.XCTrack", "org.xcontest.XCTrack.FileCopyReceiver"));
+            intent.setFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            Timber.tag("GestionFichiers").i("Intent created: %s", intent.toString());
+            activity.sendBroadcast(intent);
+            Timber.tag("GestionFichiers").i("File uri sended. File name : %s", filename);
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(this.activity, "Problems: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Timber.tag("GestionFichiers").e(e, "Error in sauverFichierDansXCTrack");
+        }
+    }
+    private static ModelConfiguration construireModel(JSONObject jsonModel) throws JSONException {
+        ModelConfiguration modelConfiguration = new ModelConfiguration();
+        List<ItemInterface> modes = construireListe(jsonModel, "modes");
+        modelConfiguration.setModes(modes);
+        String folder = jsonModel.getString("folder");
+        modelConfiguration.setFolder(folder);
+        return modelConfiguration;
+    }
+    private static List<ItemInterface> construireListe(JSONObject jsonFichier, String clef) throws
+            JSONException {
+        JSONArray jsonArray = jsonFichier.getJSONArray(clef);
+        List<ItemInterface> liste = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject jo = (JSONObject) jsonArray.get(i);
+            String id = jo.getString("id");
+            String libelle = jo.getString("libelle");
+            ItemInterface item = new ItemInterface(id, libelle);
+            liste.add(item);
+        }
+        return liste;
+    }
     public static Configuration lireConfiguration(Activity activity) {
         Configuration configuration = new Configuration();
         StringBuilder sb = new StringBuilder();
@@ -294,19 +335,5 @@ public class GestionFichiers {
         return configuration;
     }
 
-    private static List<ItemInterface> construireListe(JSONObject jsonFichier, String clef) throws
-            JSONException {
-        JSONArray jsonArray = jsonFichier.getJSONArray(clef);
-        List<ItemInterface> liste = new ArrayList<>();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jo = (JSONObject) jsonArray.get(i);
-            String id = jo.getString("id");
-            String libelle = jo.getString("libelle");
-            String xcbs = jo.getString("xcbs");
-            ItemInterface item = new ItemInterface(id, libelle, xcbs);
-            liste.add(item);
-        }
-        return liste;
-    }
 }
 

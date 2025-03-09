@@ -4,17 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class ModelConfiguration implements Serializable {
-    private String reset;
     private List<ItemInterface> modes;
     private String folder;
-
-    public void setReset(String reset) {
-        this.reset = reset;
-    }
-
-    public String getReset() {
-        return reset;
-    }
 
     public void setModes(List<ItemInterface> modes) {
         this.modes = modes;

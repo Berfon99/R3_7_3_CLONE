@@ -154,20 +154,18 @@ public class InterfaceActivity extends CommonActivity {
     private void changeMode() {
         String message = getString(R.string.changement_interface_termine);
         int indice = this.spinnerMode.getSelectedItemPosition();
-        String nomFichier = modelConfiguration.getMode(indice).getXcbs();
         String id = modelConfiguration.getMode(indice).getId();
         String modelFolder = modelConfiguration.getFolder();
-        copierFichierBootstrap(modelFolder, id, nomFichier, message);
+        copierFichierBootstrap(modelFolder, id, message);
     }
     private void executerResetInterface() {
         String message = getString(R.string.reset_termine);
-        String nomFichier = modelConfiguration.getReset();
         String modelFolder = modelConfiguration.getFolder();
-        copierFichierBootstrap(modelFolder, "reset", nomFichier, message);
+        copierFichierBootstrap(modelFolder, "reset", message);
         this.gestionFichiers.copierFichierHyperPilotBiggerCities();
     }
-    private void copierFichierBootstrap(String modelFolder, String id, String nomFichier, String message) {
-        boolean copie = this.gestionFichiers.copyBootstrapFile(modelFolder, id, nomFichier + ".xcbs");
+    private void copierFichierBootstrap(String modelFolder, String id, String message) {
+        boolean copie = this.gestionFichiers.copyBootstrapFile(modelFolder, id);
         if (!copie)
             message = getString(R.string.erreur_copie);
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();

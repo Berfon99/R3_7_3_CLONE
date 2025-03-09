@@ -5,24 +5,17 @@ import androidx.annotation.NonNull;
 public class ItemInterface {
     private final String id;
     private final String libelle;
-    private final String xcbs;
 
-    public ItemInterface(String id, String libelle, String xcbs) {
+    public ItemInterface(String id, String libelle) {
         this.id = id;
         this.libelle = libelle;
-        this.xcbs = xcbs;
     }
 
     public String getLibelle() {
         return libelle;
     }
 
-    public String getXcbs() {
-        return xcbs;
-    }
-
     public String getId() {
-
         return id;
     }
 
@@ -32,7 +25,6 @@ public class ItemInterface {
         return "ItemInterface{" +
                 "id='" + id + '\'' +
                 ", libelle='" + libelle + '\'' +
-                ", xcbs='" + xcbs + '\'' +
                 '}';
     }
 }
