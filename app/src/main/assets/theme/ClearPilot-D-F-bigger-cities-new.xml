@@ -64,7 +64,7 @@
     <!-- <style-area id="greens" fill="#d2e5ce" fade="10" /> -->
 
     <!--farmland-->
-    <!--<style-area fade="12" fill="#e4dab5" id="farmland" />-->
+    <style-area fade="12" fill="#e4dab5" id="farmland" />
 
     <!-- marsh|wetland|mud|nature_reserve -->
     <style-area fade="12" fill="#deecb9" id="greens2" />
