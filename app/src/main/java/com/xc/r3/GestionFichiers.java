@@ -51,7 +51,7 @@ public class GestionFichiers {
     private static final String ACTION_FILE_COPY = "air3manager.intent.action.FILE_COPY";
     private static final String THEME_PATH = "theme/";
     public static final String FICHIER_OA = "MOST_RECENT_OA.txt";
-    private static final String FICHIER_CLEARPILOT_BIGGER_CITIES = "ClearPilot-D-F-bigger-cities.xml"; // Noms des villes en plus grand
+    private static final String FICHIER_CLEARPILOT_BIGGER_CITIES = "ClearPilot-AIR3-big-cities.xml"; // Noms des villes en plus grand
 
     private static final String FICHIER_CONFIGURATION = "configuration.json";
     private static final String[] PERMISSIONS_STORAGE = {
