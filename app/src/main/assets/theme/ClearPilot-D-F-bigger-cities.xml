@@ -59,7 +59,7 @@
     <!--<style-area fade="12" fill="#d3dcb9" id="lightgreen" />-->
 
     <!-- grassland|scrub -->
-    <!--<style-area fade="10" fill="#dfebbc" id="darkgreen" />-->
+    <style-area fade="10" fill="#dfebbc" id="darkgreen" />
 
     <!-- <style-area id="greens" fill="#d2e5ce" fade="10" /> -->
 
