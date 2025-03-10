@@ -51,7 +51,8 @@ public class GestionFichiers {
     private static final String ACTION_FILE_COPY = "air3manager.intent.action.FILE_COPY";
     private static final String THEME_PATH = "theme/";
     public static final String FICHIER_OA = "MOST_RECENT_OA.txt";
-    private static final String FICHIER_HYPERPILOT_BIGGER_CITIES = "hyperpilot-bigger-cities.xml"; // Noms des villes en plus grand
+    private static final String FICHIER_CLEARPILOT_BIGGER_CITIES = "ClearPilot-D-F-bigger-cities.xml"; // Noms des villes en plus grand
+
     private static final String FICHIER_CONFIGURATION = "configuration.json";
     private static final String[] PERMISSIONS_STORAGE = {
             Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -65,27 +66,27 @@ public class GestionFichiers {
         verifyStoragePermissions();
     }
 
-    public boolean copierFichierHyperPilotBiggerCities() {
+    public boolean copierFichierClearPilotBiggerCities() {
         boolean copie = true;
         try {
-            creerFichierHyperPilotBiggerCitiesEnLocal(FICHIER_HYPERPILOT_BIGGER_CITIES);
-            sauverFichierDansXCTrack(FICHIER_HYPERPILOT_BIGGER_CITIES);
+            creerFichierClearPilotBiggerCitiesEnLocal(FICHIER_CLEARPILOT_BIGGER_CITIES);
+            sauverFichierDansXCTrack(FICHIER_CLEARPILOT_BIGGER_CITIES);
         } catch (Exception ex) {
             copie = false;
             Timber.e(ex);
-            Toast.makeText(activity, "erreur lors de la copie fichier hyperpilot-bigger-cities.xml\n", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, "erreur lors de la copie fichier clearpilot-bigger-cities.xml\n", Toast.LENGTH_LONG).show();
         }
         return copie;
     }
 
-    private void creerFichierHyperPilotBiggerCitiesEnLocal(String fichierHyperpilotBiggerCities) throws IOException {
+    private void creerFichierClearPilotBiggerCitiesEnLocal(String fichierClearpilotBiggerCities) throws IOException {
         InputStream in = null;
         FileOutputStream out = null;
         try {
-            in = activity.getAssets().open(THEME_PATH + fichierHyperpilotBiggerCities);
+            in = activity.getAssets().open(THEME_PATH + fichierClearpilotBiggerCities);
             String contenuFichier = CharStreams.toString(new InputStreamReader(
                     in, Charsets.UTF_8));
-            creerFichierEnLocal(contenuFichier, fichierHyperpilotBiggerCities);
+            creerFichierEnLocal(contenuFichier, fichierClearpilotBiggerCities);
         } finally {
             if (out != null) out.close();
             if (in != null) in.close();

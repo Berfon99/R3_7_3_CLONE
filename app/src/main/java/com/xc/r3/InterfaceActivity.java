@@ -148,7 +148,7 @@ public class InterfaceActivity extends CommonActivity {
 
     private void executerChangementInterface() {
         changeMode();
-        this.gestionFichiers.copierFichierHyperPilotBiggerCities(); // Noms des villes en plus grand
+        this.gestionFichiers.copierFichierClearPilotBiggerCities(); // Noms des villes en plus grand
     }
 
     private void changeMode() {
@@ -162,7 +162,7 @@ public class InterfaceActivity extends CommonActivity {
         String message = getString(R.string.reset_termine);
         String modelFolder = modelConfiguration.getFolder();
         copierFichierBootstrap(modelFolder, "reset", message);
-        this.gestionFichiers.copierFichierHyperPilotBiggerCities();
+        this.gestionFichiers.copierFichierClearPilotBiggerCities();
     }
     private void copierFichierBootstrap(String modelFolder, String id, String message) {
         boolean copie = this.gestionFichiers.copyBootstrapFile(modelFolder, id);
