@@ -705,12 +705,12 @@
                 <m v="light_rail|subway|narrow_gauge" zoom-min="14">
                     <line cap="butt" fix="true" stroke="#a0a0a0" width="0.9" />
                 </m>
-                <m v="rail|turntable" zoom-max="13">
+                <m v="rail|turntable" zoom-max="12">
                     <line cap="butt" fix="true" stroke="#d8000000" width="1.2" />
                 </m>
-                <m v="rail|turntable" zoom-min="14">
+                <m v="rail|turntable" zoom-min="13">
                     <line cap="butt" fade="12" fix="true" stipple="10" stipple-stroke="#cccccc"
-                        stipple-width="0.8" stroke="#d0000000" width="1.8" />
+                        stipple-width="0.8" stroke="#d0000000" width="1.4" />
                 </m>
 
                 <!-- <m v="rail" zoom-max="14" zoom-min="13">
