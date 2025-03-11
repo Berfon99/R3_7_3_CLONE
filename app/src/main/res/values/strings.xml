@@ -83,15 +83,14 @@
     <string name="what_is_my_air3_version">What is my AIR3 version?</string>
     <string name="device_name_confirmation_title">Confirm Device Name</string>
     <string name="device_name_confirmation_message">Use Device name instead of an allowed model? Device name should strictly follow the following structure to work "AIR3-?.?".</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
     <string name="unknown_device">Unknown device</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="change_profile">- Change profile</string>
     <string name="or_reset">- Or reset</string>
     <string name="device_not_compatible">Device not compatible</string>
     <string name="error">Error</string>
     <string name="download_not_supported_title">Download not supported</string>
     <string name="download_not_supported_message">This feature is no longer supported. If you wish to use this feature, please use a previous version of AIR³ Manager. Prefer XCTrack Airspace instead</string>
-
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

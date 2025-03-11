@@ -18,8 +18,8 @@ android {
         applicationId "com.xc.r3"
         minSdkVersion 27
         targetSdkVersion 34
-        versionCode 3000
-        versionName "3.0" //Brand new with 4 actions based on AI, one AIR³ Manager for all units, new theme.xml file and change for new terrain type
+        versionCode 3010
+        versionName "3.0.1" //No more Download of Openair files
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
