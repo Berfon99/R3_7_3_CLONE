@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 import timber.log.Timber;
+import com.xc.r3.Util;
 
 @SuppressWarnings("ALL")
 public abstract class CommonActivity extends AppCompatActivity {
@@ -172,7 +173,7 @@ public abstract class CommonActivity extends AppCompatActivity {
         } else {
             String message = getString(R.string.erreur_envoie_message);
             String titre = getString(R.string.attention);
-            this.afficherMessage(message, titre, ICONE_ATTENTION);
+            Util.afficherMessage(this, message, titre, ICONE_ATTENTION); // Modified line
         }
     }
 
@@ -474,5 +475,4 @@ public abstract class CommonActivity extends AppCompatActivity {
         }
     }
 
-    public abstract void afficherMessage(String message, String titre, int typeIcone);
 }

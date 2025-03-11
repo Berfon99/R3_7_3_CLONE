@@ -89,4 +89,8 @@
     <string name="ok">Ok</string>
     <string name="change_profile">- Change profile</string>
     <string name="or_reset">- Or reset</string>
+    <string name="device_not_compatible">Device not compatible</string>
+    <string name="error">Error</string>
+
+
 </resources>

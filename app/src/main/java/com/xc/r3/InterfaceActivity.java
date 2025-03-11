@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import timber.log.Timber;
+import com.xc.r3.Util;
 
 public class InterfaceActivity extends CommonActivity {
 
@@ -32,33 +33,31 @@ public class InterfaceActivity extends CommonActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Timber.d("InterfaceActivity onCreate start");
         super.onCreate(savedInstanceState);
-        try {
-            setContentView(R.layout.activity_interface);
-            ActionBar actionBar = getSupportActionBar();  //Make sure you are extending ActionBarActivity
-            Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            this.user = User.getInstance(this);
-            this.configuration = GestionFichiers.lireConfiguration(this);
-            this.dataStorageManager = DataStorageManager.getInstance(this);
-            String selectedModel = dataStorageManager.getSelectedModel();
-            this.modelConfiguration = configuration.getModelConfiguration(selectedModel);
+        setContentView(R.layout.activity_interface);
+        ActionBar actionBar = getSupportActionBar();
+        Objects.requireNonNull(actionBar).setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        this.user = User.getInstance(this);
+        this.configuration = GestionFichiers.lireConfiguration(this);
+        this.dataStorageManager = DataStorageManager.getInstance(this);
+        String selectedModel = dataStorageManager.getSelectedModel();
+        this.modelConfiguration = configuration.getModelConfiguration(selectedModel);
 
-            initIconesModes();
-            initSpinnerMode();
-
-            Timber.d("InterfaceActivity onCreate completed successfully");
-        } catch (Exception e) {
-            Timber.e(e, "Error in InterfaceActivity onCreate");
+        if (this.modelConfiguration == null) {
+            Timber.w("Selected model '%s' is not compatible.", selectedModel);
+            if (!isFinishing()) { // Check if the activity is finishing
+                Util.afficherMessage(this, getString(R.string.device_not_compatible), getString(R.string.error), 0);
+            }
+            finish();
+            return;
         }
+        initIconesModes();
+        initSpinnerMode();
+        Timber.d("InterfaceActivity onCreate completed successfully");
     }
-
     @Override
     protected void finDemandeAccessFichiers() {
 
-    }
-
-    @Override
-    public void afficherMessage(String message, String titre, int typeIcone) {
     }
 
     private void initIconesModes() {

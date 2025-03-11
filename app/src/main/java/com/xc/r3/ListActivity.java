@@ -69,17 +69,6 @@ public class ListActivity extends CommonActivity {
         afficherMessage(message, titre, ICONE_APPLICATION);
     }
 
-    @Override
-    public void downloadListeFichiersTerminee(List<Fichier> fichiers) {
-        super.downloadListeFichiersTerminee(fichiers);
-        if (fichiers==null || fichiers.isEmpty()) {
-            setResult(ListActivity.PAS_ACCES_INTERNET);
-            finish();
-        } else {
-            initialiserListView();
-        }
-    }
-
     @SuppressLint("UseCompatLoadingForDrawables")
     public void afficherMessage(String message, String titre, int typeIcone) {
         AlertDialog.Builder alert = new AlertDialog.Builder(this, android.R.style.Theme_Material_Light_Dialog);
@@ -90,6 +79,17 @@ public class ListActivity extends CommonActivity {
         if (typeIcone == ICONE_APPLICATION) alert.setIcon(getDrawable(R.drawable.air3manager));
         else if (typeIcone == ICONE_ATTENTION) alert.setIcon(getDrawable(R.drawable.ic_warning));
         alert.show();
+    }
+
+    @Override
+    public void downloadListeFichiersTerminee(List<Fichier> fichiers) {
+        super.downloadListeFichiersTerminee(fichiers);
+        if (fichiers==null || fichiers.isEmpty()) {
+            setResult(ListActivity.PAS_ACCES_INTERNET);
+            finish();
+        } else {
+            initialiserListView();
+        }
     }
 
     @Override

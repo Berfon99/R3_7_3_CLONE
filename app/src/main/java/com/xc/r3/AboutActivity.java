@@ -25,9 +25,4 @@ public class AboutActivity extends CommonActivity {
     protected void finDemandeAccessFichiers() {
         // Aucune action spécifique nécessaire dans cette activité
     }
-
-    @Override
-    public void afficherMessage(String message, String titre, int icone) {
-        // Aucune action spécifique nécessaire dans cette activité
-    }
 }

@@ -186,13 +186,6 @@ public class MainActivity extends CommonActivity {
             }
         }
     }
-    @Override
-    protected void finDemandeAccessFichiers() {
-    }
-
-    public void downloadListeFichiersOpenAir() {
-        launchManager.downloadListeFichiersOpenAir();
-    }
 
     @SuppressLint("UseCompatLoadingForDrawables")
     public void afficherMessage(String message, String titre, int typeIcone) {
@@ -202,6 +195,14 @@ public class MainActivity extends CommonActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     public void afficherMessageWarning(Fichier fichier) {
         launchManager.afficherMessageWarning(fichier);
+    }
+
+    @Override
+    protected void finDemandeAccessFichiers() {
+    }
+
+    public void downloadListeFichiersOpenAir() {
+        launchManager.downloadListeFichiersOpenAir();
     }
 
     void afficherAttente() {

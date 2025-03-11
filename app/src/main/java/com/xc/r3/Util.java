@@ -2,10 +2,16 @@ package com.xc.r3;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import timber.log.Timber;
 
@@ -73,5 +79,27 @@ public class Util {
         User user = User.getInstance(context);
         if (user.delayXCTrackOnBoot()) return DELAY;
         return 0;
+    }
+
+    public static void afficherMessage(Context context, String message, String titre, int typeIcone) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                if (context instanceof AppCompatActivity) {
+                    AppCompatActivity activity = (AppCompatActivity) context;
+                    if (!activity.isFinishing() && !activity.isDestroyed()) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(context, android.R.style.Theme_Material_Light_Dialog);
+                        alert.setTitle(titre);
+                        alert.setMessage("\n" + message);
+                        alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        alert.show();
+                    }
+                }
+            }
+        });
     }
 }

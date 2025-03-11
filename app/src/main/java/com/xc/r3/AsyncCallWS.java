@@ -2,6 +2,7 @@ package com.xc.r3;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import com.xc.r3.Util;
 
 public class AsyncCallWS extends AsyncTask<Object, Void, Object[]> {
 
@@ -47,7 +48,7 @@ public class AsyncCallWS extends AsyncTask<Object, Void, Object[]> {
         } else if (reponse.length() < 4) {
             String message = this.activity.getString(R.string.erreur_requete) + " : " + reponse;
             String titre = this.activity.getString(R.string.erreur);
-            this.activity.afficherMessage(message, titre, CommonActivity.ICONE_ATTENTION);
+            Util.afficherMessage(this.activity, message, titre, CommonActivity.ICONE_ATTENTION); // Modified line
             return;
         }
         switch (operation) {
