@@ -19,7 +19,7 @@ android {
         minSdkVersion 27
         targetSdkVersion 34
         versionCode 3000
-        versionName "3.0" //new interface with 4 actions, one AIR³ for all units
+        versionName "3.0" //Brand new with 4 actions based on AI, one AIR³ Manager for all units, new theme.xml file and change for new terrain type
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
@@ -75,14 +75,15 @@ dependencies {
 }
 
 // Custom task to extract versionName and comment
+// Check
 task generateVersionHistory {
     group = "Custom"
     description = "Generates a version history file from the versionName and its comment."
 
     doLast {
-        def buildFile = project.file("build.gradle") // Corrected line
-        def versionHistoryFile = project.file("app/version_history.txt")
-        def lastVersionFile = project.file("app/last_version.txt")
+        def buildFile = project.file("build.gradle")
+        def versionHistoryFile = project.file("version_history.txt")
+        def lastVersionFile = project.file("last_version.txt")
 
         // Create the directory if it doesn't exist
         def versionHistoryDir = versionHistoryFile.parentFile
