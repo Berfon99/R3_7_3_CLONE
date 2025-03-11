@@ -1,19 +1,14 @@
 package com.xc.r3;
 
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Switch;
-import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,10 +20,8 @@ import java.util.Objects;
 public class PreferencesActivity extends AppCompatActivity {
 
     private Switch switchXCTrackBoot;
-    private Switch switchDownload;
     private Switch switchDelayXCTrackOnBoot;
-    private Switch switchDownloadOnBoot;
-    private Switch switchDanger;
+    private Switch switchDownload;
     private User user;
 
     private Spinner modelSpinner;
@@ -52,9 +45,7 @@ public class PreferencesActivity extends AppCompatActivity {
         // Initialize Switches
         switchXCTrackBoot = findViewById(R.id.switch_xctrack);
         switchDelayXCTrackOnBoot = findViewById(R.id.switch_xctrack_delay);
-        switchDownloadOnBoot = findViewById(R.id.switch_download_on_boot);
         switchDownload = findViewById(R.id.switch_download);
-        switchDanger = findViewById(R.id.switch_danger);
 
         // Initialize Model Selection UI
         modelSpinner = findViewById(R.id.model_spinner);
@@ -65,7 +56,12 @@ public class PreferencesActivity extends AppCompatActivity {
 
         // Setup Switch Listeners
         switchXCTrackBoot.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchDelayXCTrackOnBoot());
-        switchDownload.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchesDownload());
+        switchDownload.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                showDownloadNotSupportedDialog();
+                switchDownload.setChecked(false);
+            }
+        });
 
         // Initialize Switch States
         initSwitches();
@@ -104,18 +100,17 @@ public class PreferencesActivity extends AppCompatActivity {
             String selectedModelInLambda = modelSpinner.getSelectedItem().toString();
             if (selectedModelInLambda.equals("Device name: " + deviceName)) {
                 showDeviceNameConfirmationDialog(deviceName);
-            }
-            else {
+            } else {
                 dataStorageManager.saveSelectedModel(selectedModelInLambda);
             }
         });
     }
+
     private void initSwitches() {
         switchXCTrackBoot.setChecked(user.lancerXCTrackBoot());
         setSwitchDelayXCTrackOnBoot();
         switchDelayXCTrackOnBoot.setChecked(user.delayXCTrackOnBoot());
         switchDownload.setChecked(user.downloadFichierOpenAir());
-        setSwitchesDownload();
     }
 
     private void setSwitchDelayXCTrackOnBoot() {
@@ -123,11 +118,15 @@ public class PreferencesActivity extends AppCompatActivity {
         switchDelayXCTrackOnBoot.setChecked(switchXCTrackBoot.isChecked() && user.delayXCTrackOnBoot());
     }
 
-    private void setSwitchesDownload() {
-        switchDownloadOnBoot.setEnabled(switchDownload.isChecked());
-        switchDownloadOnBoot.setChecked(switchDownload.isChecked() && user.downloadFichierOpenAirOnBoot());
-        switchDanger.setEnabled(switchDownload.isChecked());
-        switchDanger.setChecked(switchDownload.isChecked() && user.getDangerous());
+    private void showDownloadNotSupportedDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.download_not_supported_title))
+                .setMessage(getString(R.string.download_not_supported_message))
+                .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                    // Do nothing, the switch is already set to false
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void showDeviceNameConfirmationDialog(String deviceName) {
@@ -163,13 +162,12 @@ public class PreferencesActivity extends AppCompatActivity {
         setResult(RESULT_OK);
         super.onBackPressed();
     }
+
     private void sauver() {
         boolean bootXCtrack = switchXCTrackBoot.isChecked();
         boolean delayXCtrackOnBoot = switchDelayXCTrackOnBoot.isChecked();
         boolean download = switchDownload.isChecked();
-        boolean downloadOnBoot = switchDownloadOnBoot.isChecked();
-        boolean danger = switchDanger.isChecked();
-        user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, downloadOnBoot, danger);
+        user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, false, false);
     }
 
     @Override

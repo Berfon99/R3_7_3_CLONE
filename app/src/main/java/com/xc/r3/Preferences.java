@@ -8,7 +8,6 @@ public class Preferences {
 
     private static final String KEY_USER = "user";
     private static final String KEY_TOKEN = "token";
-    private static final String KEY_NOMS_FICHIERS = "liste fichiers";
 
     private final SharedPreferences preferences;
 
