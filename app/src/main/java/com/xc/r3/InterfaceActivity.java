@@ -46,8 +46,6 @@ public class InterfaceActivity extends CommonActivity {
         if (this.modelConfiguration == null) {
             Timber.w("Selected model '%s' is not compatible.", selectedModel);
             Util.afficherMessage(this, getString(R.string.device_not_compatible), getString(R.string.error), 0);
-            finishActivity = true;
-            messageDisplayed = true;
         } else {
             initIconesModes();
             initSpinnerMode();
@@ -58,9 +56,6 @@ public class InterfaceActivity extends CommonActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (finishActivity && !messageDisplayed) {
-            finish();
-        }
     }
     @Override
     protected void finDemandeAccessFichiers() {

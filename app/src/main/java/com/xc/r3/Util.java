@@ -83,31 +83,27 @@ public class Util {
         return 0;
     }
 
-    public static void afficherMessage(Context context, String message, String titre, int typeIcone) {
+    public static void afficherMessage(Activity activity, String message, String titre, int typeIcone) {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "afficherMessage: Runnable is running");
-                if (context instanceof AppCompatActivity) {
-                    AppCompatActivity activity = (AppCompatActivity) context;
+                if (activity != null) {
                     Log.d(TAG, "afficherMessage: isFinishing() = " + activity.isFinishing());
                     Log.d(TAG, "afficherMessage: isDestroyed() = " + activity.isDestroyed());
-                    if (!activity.isFinishing() && !activity.isDestroyed()) {
-                        Log.d(TAG, "afficherMessage: Showing AlertDialog");
-                        AlertDialog.Builder alert = new AlertDialog.Builder(context, android.R.style.Theme_Material_Light_Dialog);
-                        alert.setTitle(titre);
-                        alert.setMessage("\n" + message);
-                        alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.dismiss();
-                            }
-                        });
-                        alert.show();
-                    } else {
-                        Log.d(TAG, "afficherMessage: Activity is finishing or destroyed, not showing AlertDialog");
-                    }
+                    Log.d(TAG, "afficherMessage: Showing AlertDialog");
+                    AlertDialog.Builder alert = new AlertDialog.Builder(activity, android.R.style.Theme_Material_Light_Dialog);
+                    alert.setTitle(titre);
+                    alert.setMessage("\n" + message);
+                    alert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            activity.finish();
+                        }
+                    });
+                    alert.show();
                 } else {
-                    Log.e(TAG, "afficherMessage: Context is not an AppCompatActivity");
+                    Log.e(TAG, "afficherMessage: Context is null");
                 }
             }
         });
