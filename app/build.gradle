@@ -18,8 +18,8 @@ android {
         applicationId "com.xc.r3"
         minSdkVersion 27
         targetSdkVersion 34
-        versionCode 2163
-        versionName "2.16.3" //new interface
+        versionCode 3000
+        versionName "3.0" //new interface with 4 actions, one AIR³ for all units
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
@@ -72,4 +72,53 @@ dependencies {
     // Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
+}
+
+// Custom task to extract versionName and comment
+task generateVersionHistory {
+    group = "Custom"
+    description = "Generates a version history file from the versionName and its comment."
+
+    doLast {
+        def buildFile = project.file("app/build.gradle")
+        def versionHistoryFile = project.file("app/version_history.txt")
+        def lastVersionFile = project.file("app/last_version.txt")
+
+        if (!versionHistoryFile.exists()) {
+            versionHistoryFile.createNewFile()
+        }
+        if (!lastVersionFile.exists()) {
+            lastVersionFile.createNewFile()
+        }
+
+        def lines = buildFile.readLines()
+        String versionNameLine = null
+        for (String line in lines) {
+            if (line.trim().startsWith("versionName")) {
+                versionNameLine = line
+                break
+            }
+        }
+
+        if (versionNameLine != null) {
+            def versionName = versionNameLine.substring(versionNameLine.indexOf('"') + 1, versionNameLine.lastIndexOf('"'))
+            def comment = versionNameLine.substring(versionNameLine.indexOf("//") + 2).trim()
+            def currentVersionLine = "$versionName - $comment\n"
+
+            def lastVersion = lastVersionFile.text.trim()
+
+            if (currentVersionLine.trim() != lastVersion.trim()) {
+                versionHistoryFile.append(currentVersionLine)
+                lastVersionFile.write(currentVersionLine)
+            }
+        } else {
+            println("versionName not found in build.gradle")
+        }
+    }
+}
+
+tasks.configureEach {
+    if (name == "build") {
+        dependsOn generateVersionHistory
+    }
 }
