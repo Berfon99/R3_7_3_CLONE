@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">Installasjon kreves</string>
 	<string name="message_installation_upgrader">AIR³ Upgrader-appen må være installert for å utføre oppdateringene. Vil du laste den ned?</string>
 	<string name="bouton_download">Last ned</string>
-	<string name="about_text">Versjon : \nWeb : www.fly-air3.com\nUtviklet av : O. Legrand</string>
+	<string name="about_text">Versjon : \nWeb : www.fly-air3.com\nUtviklet av : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">Start XCTrack</string>
 	<string name="xctrack_interface">XCTrack-grensesnitt</string>
 	<string name="xcguide_launch">Start XC Guide</string>

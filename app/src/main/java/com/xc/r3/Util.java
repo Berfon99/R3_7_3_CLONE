@@ -27,14 +27,12 @@ public class Util {
         Timber.i("Lancer XCTrack...");
         Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage("org.xcontest.XCTrack");
         if (launchIntent != null) {
-            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            launchIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             Timber.i("Lancement de XCTrack...");
             activity.startActivity(launchIntent);
         } else {
             Timber.i("Problème de nom de package avec XCTrack..");
         }
-        activity.getIntent().putExtra(BOOT, false);
-        activity.finish();
     }
 
     public static void lancerXCGuide(Activity activity) {

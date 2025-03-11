@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">Zahtevana namestitev</string>
 	<string name="message_installation_upgrader">Za izvedbo posodobitev mora biti nameščena aplikacija AIR³ Upgrader. Jo želite prenesti?</string>
 	<string name="bouton_download">Prenesi</string>
-	<string name="about_text">Različica : \nSplet : www.fly-air3.com\nRazvil : O. Legrand</string>
+	<string name="about_text">Različica : \nSplet : www.fly-air3.com\nRazvil : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">Zaženi XCTrack</string>
 	<string name="xctrack_interface">Vmesnik XCTrack</string>
 	<string name="xcguide_launch">Zaženi XC Guide</string>

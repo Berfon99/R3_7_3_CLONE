@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">需要安装</string>
 	<string name="message_installation_upgrader">必须安装 AIR³ Upgrader 应用程序才能执行更新。您要下载吗？</string>
 	<string name="bouton_download">下载</string>
-	<string name="about_text">版本 : \n网站 : www.fly-air3.com\n开发者 : O. Legrand</string>
+	<string name="about_text">版本 : \n网站 : www.fly-air3.com\n开发者 : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">启动 XCTrack</string>
 	<string name="xctrack_interface">XCTrack 界面</string>
 	<string name="xcguide_launch">启动 XC Guide</string>

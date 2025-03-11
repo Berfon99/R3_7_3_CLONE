@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">Απαιτείται εγκατάσταση</string>
 	<string name="message_installation_upgrader">Η εφαρμογή AIR³ Upgrader πρέπει να είναι εγκατεστημένη για την εκτέλεση των αναβαθμίσεων. Θέλετε να την κατεβάσετε;</string>
 	<string name="bouton_download">Λήψη</string>
-	<string name="about_text">Έκδοση : \nΙστός : www.fly-air3.com\nΑναπτύχθηκε από : O. Legrand</string>
+	<string name="about_text">Έκδοση : \nΙστός : www.fly-air3.com\nΑναπτύχθηκε από : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">Εκκίνηση XCTrack</string>
 	<string name="xctrack_interface">Διεπαφή XCTrack</string>
 	<string name="xcguide_launch">Εκκίνηση XC Guide</string>

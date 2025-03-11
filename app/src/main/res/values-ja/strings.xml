@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">インストールが必要です</string>
 	<string name="message_installation_upgrader">アップデートを実行するには、AIR³ Upgraderアプリをインストールする必要があります。ダウンロードしますか？</string>
 	<string name="bouton_download">ダウンロード</string>
-	<string name="about_text">バージョン : \nウェブ : www.fly-air3.com\n開発者 : O. Legrand</string>
+	<string name="about_text">バージョン : \nウェブ : www.fly-air3.com\n開発者 : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">XCTrackを起動</string>
 	<string name="xctrack_interface">XCTrackインターフェース</string>
 	<string name="xcguide_launch">XC Guideを起動</string>

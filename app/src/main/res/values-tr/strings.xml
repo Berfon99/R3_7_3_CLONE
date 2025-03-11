@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">Kurulum gerekli</string>
 	<string name="message_installation_upgrader">Güncellemeleri gerçekleştirmek için AIR³ Upgrader uygulamasının kurulu olması gerekiyor. İndirmek ister misiniz?</string>
 	<string name="bouton_download">İndir</string>
-	<string name="about_text">Sürüm : \nWeb : www.fly-air3.com\nGeliştiren : O. Legrand</string>
+	<string name="about_text">Sürüm : \nWeb : www.fly-air3.com\nGeliştiren : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">XCTrack\'i başlat</string>
 	<string name="xctrack_interface">XCTrack Arayüzü</string>
 	<string name="xcguide_launch">XC Guide\'ı başlat</string>

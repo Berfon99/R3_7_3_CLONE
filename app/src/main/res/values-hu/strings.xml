@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">Telepítés szükséges</string>
 	<string name="message_installation_upgrader">Az AIR³ Upgrader alkalmazást telepíteni kell a frissítések végrehajtásához. Szeretnéd letölteni?</string>
 	<string name="bouton_download">Letöltés</string>
-	<string name="about_text">Verzió : \nWeb : www.fly-air3.com\nFejlesztette : O. Legrand</string>
+	<string name="about_text">Verzió : \nWeb : www.fly-air3.com\nFejlesztette : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">XCTrack indítása</string>
 	<string name="xctrack_interface">XCTrack felület</string>
 	<string name="xcguide_launch">XC Guide indítása</string>

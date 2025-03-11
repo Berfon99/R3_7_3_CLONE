@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">Je vyžadována instalace</string>
 	<string name="message_installation_upgrader">Aplikace AIR³ Upgrader musí být nainstalována pro provedení aktualizací. Chcete ji stáhnout?</string>
 	<string name="bouton_download">Stáhnout</string>
-	<string name="about_text">Verze : \nWeb : www.fly-air3.com\nVyvinul : O. Legrand</string>
+	<string name="about_text">Verze : \nWeb : www.fly-air3.com\nVyvinul : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">Spustit XCTrack</string>
 	<string name="xctrack_interface">Rozhraní XCTrack</string>
 	<string name="xcguide_launch">Spustit XC Guide</string>

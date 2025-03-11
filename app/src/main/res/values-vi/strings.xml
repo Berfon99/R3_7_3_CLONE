@@ -70,7 +70,7 @@
 	<string name="titre_installation_upgrader">Yêu cầu cài đặt</string>
 	<string name="message_installation_upgrader">Ứng dụng AIR³ Upgrader phải được cài đặt để thực hiện cập nhật. Bạn có muốn tải xuống không?</string>
 	<string name="bouton_download">Tải xuống</string>
-	<string name="about_text">Phiên bản : \nTrang web : www.fly-air3.com\nĐược phát triển bởi : O. Legrand</string>
+	<string name="about_text">Phiên bản : \nTrang web : www.fly-air3.com\nĐược phát triển bởi : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">Khởi chạy XCTrack</string>
 	<string name="xctrack_interface">Giao diện XCTrack</string>
 	<string name="xcguide_launch">Khởi chạy XC Guide</string>

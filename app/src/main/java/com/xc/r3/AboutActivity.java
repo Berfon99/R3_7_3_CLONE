@@ -13,7 +13,7 @@ public class AboutActivity extends CommonActivity {
         // Utilisation de BuildConfig.VERSION_NAME pour récupérer la version
         String version = getString(R.string.version) + " : " + BuildConfig.VERSION_NAME;
 
-        String developpeur = getString(R.string.developpe_par) + " : O. Legrand";
+        String developpeur = getString(R.string.developpe_par) + " : O. Legrand & B. Fontaine";
         String web = getString(R.string.web) + " : " + "www.fly-air3.com";
         String message = version + "\n" + web + "\n" + developpeur;
 

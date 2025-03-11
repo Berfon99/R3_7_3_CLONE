@@ -2,3 +2,4 @@
 2.16.3 - new interface
 3.0 - Brand new with 4 actions based on AI, one AIR³ Manager for all units, new theme.xml file and change for new terrain type
 3.0.1 - No more Download of Openair files
+3.0.2 - Solving going back to MainActivity after closing XCTrack

@@ -71,7 +71,7 @@
 	<string name="titre_installation_upgrader">Требуется установка</string>
 	<string name="message_installation_upgrader">Для выполнения обновлений необходимо установить приложение AIR³ Upgrader. Хотите его скачать?</string>
 	<string name="bouton_download">Скачать</string>
-	<string name="about_text">Версия : \nВеб : www.fly-air3.com\nРазработано : O. Legrand</string>
+	<string name="about_text">Версия : \nВеб : www.fly-air3.com\nРазработано : O. Legrand &amp; B. Fontaine</string>
 	<string name="xctrack_launch">Запустить XCTrack</string>
 	<string name="xctrack_interface">Интерфейс XCTrack</string>
 	<string name="xcguide_launch">Запустить XC Guide</string>
