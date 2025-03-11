@@ -80,9 +80,15 @@ task generateVersionHistory {
     description = "Generates a version history file from the versionName and its comment."
 
     doLast {
-        def buildFile = project.file("app/build.gradle")
+        def buildFile = project.file("build.gradle") // Corrected line
         def versionHistoryFile = project.file("app/version_history.txt")
         def lastVersionFile = project.file("app/last_version.txt")
+
+        // Create the directory if it doesn't exist
+        def versionHistoryDir = versionHistoryFile.parentFile
+        if (!versionHistoryDir.exists()) {
+            versionHistoryDir.mkdirs()
+        }
 
         if (!versionHistoryFile.exists()) {
             versionHistoryFile.createNewFile()
