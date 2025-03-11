@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,7 +16,6 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import timber.log.Timber;
-import com.xc.r3.Util;
 
 public class InterfaceActivity extends CommonActivity {
 
@@ -28,6 +26,7 @@ public class InterfaceActivity extends CommonActivity {
     private Configuration configuration;
     private DataStorageManager dataStorageManager;
     private ModelConfiguration modelConfiguration;
+    private boolean finishActivity = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +44,23 @@ public class InterfaceActivity extends CommonActivity {
 
         if (this.modelConfiguration == null) {
             Timber.w("Selected model '%s' is not compatible.", selectedModel);
-            if (!isFinishing()) { // Check if the activity is finishing
-                Util.afficherMessage(this, getString(R.string.device_not_compatible), getString(R.string.error), 0);
-            }
-            finish();
-            return;
+            Util.afficherMessage(this, getString(R.string.device_not_compatible), getString(R.string.error), 0);
+            finishActivity = true;
+        } else {
+            initIconesModes();
+            initSpinnerMode();
         }
-        initIconesModes();
-        initSpinnerMode();
         Timber.d("InterfaceActivity onCreate completed successfully");
     }
     @Override
+    protected void onResume() {
+        super.onResume();
+        if (finishActivity) {
+            finish();
+        }
+    }
+    @Override
     protected void finDemandeAccessFichiers() {
-
     }
 
     private void initIconesModes() {
@@ -111,7 +114,9 @@ public class InterfaceActivity extends CommonActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        sauver();
+        if (spinnerMode != null) {
+            sauver();
+        }
     }
 
     private void sauver() {

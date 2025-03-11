@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +21,7 @@ public class Util {
     public static final String NOTIFICATION_DATE_FICHIER = "notification date fichier";
     public static final String NOTIFICATION_ACCES_INTERNET = "notification accès internet";
     private static final int DELAY = 10 * 1000; // délai de 10 secondes avant de lancer
+    private static final String TAG = "Util";
 
     public static void lancerXCTrack(Activity activity) {
         Timber.i("Lancer XCTrack...");
@@ -85,9 +87,13 @@ public class Util {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
+                Log.d(TAG, "afficherMessage: Runnable is running");
                 if (context instanceof AppCompatActivity) {
                     AppCompatActivity activity = (AppCompatActivity) context;
+                    Log.d(TAG, "afficherMessage: isFinishing() = " + activity.isFinishing());
+                    Log.d(TAG, "afficherMessage: isDestroyed() = " + activity.isDestroyed());
                     if (!activity.isFinishing() && !activity.isDestroyed()) {
+                        Log.d(TAG, "afficherMessage: Showing AlertDialog");
                         AlertDialog.Builder alert = new AlertDialog.Builder(context, android.R.style.Theme_Material_Light_Dialog);
                         alert.setTitle(titre);
                         alert.setMessage("\n" + message);
@@ -97,7 +103,11 @@ public class Util {
                             }
                         });
                         alert.show();
+                    } else {
+                        Log.d(TAG, "afficherMessage: Activity is finishing or destroyed, not showing AlertDialog");
                     }
+                } else {
+                    Log.e(TAG, "afficherMessage: Context is not an AppCompatActivity");
                 }
             }
         });
