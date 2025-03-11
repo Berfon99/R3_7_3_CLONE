@@ -27,6 +27,7 @@ public class InterfaceActivity extends CommonActivity {
     private DataStorageManager dataStorageManager;
     private ModelConfiguration modelConfiguration;
     private boolean finishActivity = false;
+    private boolean messageDisplayed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,16 +47,18 @@ public class InterfaceActivity extends CommonActivity {
             Timber.w("Selected model '%s' is not compatible.", selectedModel);
             Util.afficherMessage(this, getString(R.string.device_not_compatible), getString(R.string.error), 0);
             finishActivity = true;
+            messageDisplayed = true;
         } else {
             initIconesModes();
             initSpinnerMode();
         }
         Timber.d("InterfaceActivity onCreate completed successfully");
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (finishActivity) {
+        if (finishActivity && !messageDisplayed) {
             finish();
         }
     }
