@@ -22,6 +22,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private Switch switchXCTrackBoot;
     private Switch switchDelayXCTrackOnBoot;
     private Switch switchDownload;
+    private Switch switchXCGuideBoot; // New switch
     private User user;
 
     private Spinner modelSpinner;
@@ -46,6 +47,7 @@ public class PreferencesActivity extends AppCompatActivity {
         switchXCTrackBoot = findViewById(R.id.switch_xctrack);
         switchDelayXCTrackOnBoot = findViewById(R.id.switch_xctrack_delay);
         switchDownload = findViewById(R.id.switch_download);
+        switchXCGuideBoot = findViewById(R.id.switch_xcguide); // Initialize the new switch
 
         // Initialize Model Selection UI
         modelSpinner = findViewById(R.id.model_spinner);
@@ -61,6 +63,9 @@ public class PreferencesActivity extends AppCompatActivity {
                 showDownloadNotSupportedDialog();
                 switchDownload.setChecked(false);
             }
+        });
+        switchXCGuideBoot.setOnCheckedChangeListener((buttonView, isChecked) -> { // Add listener for the new switch
+            sauver();
         });
 
         // Initialize Switch States
@@ -111,6 +116,7 @@ public class PreferencesActivity extends AppCompatActivity {
         setSwitchDelayXCTrackOnBoot();
         switchDelayXCTrackOnBoot.setChecked(user.delayXCTrackOnBoot());
         switchDownload.setChecked(user.downloadFichierOpenAir());
+        switchXCGuideBoot.setChecked(user.lancerXCGuideBoot()); // Set the initial state of the new switch
     }
 
     private void setSwitchDelayXCTrackOnBoot() {
@@ -167,7 +173,8 @@ public class PreferencesActivity extends AppCompatActivity {
         boolean bootXCtrack = switchXCTrackBoot.isChecked();
         boolean delayXCtrackOnBoot = switchDelayXCTrackOnBoot.isChecked();
         boolean download = switchDownload.isChecked();
-        user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, false, false);
+        boolean bootXCGuide = switchXCGuideBoot.isChecked(); // Get the state of the new switch
+        user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, false, false, bootXCGuide); // Update the user's preference
     }
 
     @Override

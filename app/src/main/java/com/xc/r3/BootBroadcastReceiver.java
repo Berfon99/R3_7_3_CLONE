@@ -13,7 +13,10 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Timber.i("OnReceive..." + intent.getAction());
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            Util.lancerMainActivity(context, true);
+            User user = User.getInstance(context);
+            if (user.lancerXCGuideBoot()) {
+                Util.lancerMainActivity(context, true);
+            }
         }
     }
 }

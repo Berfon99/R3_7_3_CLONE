@@ -9,6 +9,7 @@ public class User {
     private static final String KEY_TOKEN = "token";
     private static final String KEY_DANGEROUS = "dangerous";
     private static final String KEY_XCTRACK_BOOT = "XCTrack boot";
+    private static final String KEY_XCGUIDE_BOOT = "XCGuide boot";
     private static final String KEY_DELAY_XCTRACK_ON_BOOT = "delay XCTrack on boot";
     private static final String KEY_DOWNLOAD_FICHIER_OPENAIR = "download fichier OA";
     private static final String KEY_MODE = "mode";
@@ -54,6 +55,9 @@ public class User {
     public boolean lancerXCTrackBoot() {
         return preferences.getBoolean(KEY_XCTRACK_BOOT, true);
     }
+    public boolean lancerXCGuideBoot() {
+        return preferences.getBoolean(KEY_XCGUIDE_BOOT, false);
+    }
 
     public boolean delayXCTrackOnBoot() {
         return preferences.getBoolean(KEY_DELAY_XCTRACK_ON_BOOT, false);
@@ -65,18 +69,18 @@ public class User {
     public boolean downloadFichierOpenAir() {
         return preferences.getBoolean(KEY_DOWNLOAD_FICHIER_OPENAIR, false);
     }
-    public void setPreferencesBoolean(boolean bootXCtrack, boolean delayXTrackOnBoot, boolean download,boolean download_on_boot, boolean danger) {
+    public void setPreferencesBoolean(boolean bootXCtrack, boolean delayXTrackOnBoot, boolean download, boolean download_on_boot, boolean danger, boolean bootXCGuide) {
         Editor editor = preferences.edit();
         editor.putBoolean(KEY_XCTRACK_BOOT, bootXCtrack);
-        if ( bootXCtrack ) {
+        if (bootXCtrack) {
             editor.putBoolean(KEY_DELAY_XCTRACK_ON_BOOT, delayXTrackOnBoot);
         }
         editor.putBoolean(KEY_DOWNLOAD_FICHIER_OPENAIR, download);
         editor.putBoolean(KEY_DOWNLOAD_FICHIER_OPENAIR_ON_BOOT, download_on_boot);
         editor.putBoolean(KEY_DANGEROUS, danger);
+        editor.putBoolean(KEY_XCGUIDE_BOOT, bootXCGuide);
         editor.apply();
     }
-
     public void setPreferencesInterface(int indiceMode, int indiceTheme) {
         Editor editor = preferences.edit();
         editor.putInt(KEY_MODE, indiceMode);
