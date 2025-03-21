@@ -3,6 +3,7 @@ package com.xc.r3;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -43,6 +44,9 @@ public class InterfaceActivity extends CommonActivity {
         String selectedModel = dataStorageManager.getSelectedModel();
         this.modelConfiguration = configuration.getModelConfiguration(selectedModel);
 
+        // Set the ActionBar title with selected model and Android version
+        setActionBarTitleWithSelectedModel();
+
         if (this.modelConfiguration == null) {
             Timber.w("Selected model '%s' is not compatible.", selectedModel);
             Util.afficherMessage(this, getString(R.string.device_not_compatible), getString(R.string.error), 0);
@@ -51,6 +55,15 @@ public class InterfaceActivity extends CommonActivity {
             initSpinnerMode();
         }
         Timber.d("InterfaceActivity onCreate completed successfully");
+    }
+
+    private void setActionBarTitleWithSelectedModel() {
+        String selectedModel = dataStorageManager.getSelectedModel();
+        String finalSelectedModel = selectedModel.isEmpty() ? Build.MODEL : selectedModel;
+        String androidVersion = Build.VERSION.RELEASE;
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("AIR³ Manager - " + finalSelectedModel + " - Android " + androidVersion);
+        }
     }
 
     @Override
