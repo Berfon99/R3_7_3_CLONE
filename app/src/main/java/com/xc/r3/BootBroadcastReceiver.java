@@ -8,15 +8,12 @@ import timber.log.Timber;
 
 public class BootBroadcastReceiver extends BroadcastReceiver {
 
-
     @Override
     public void onReceive(Context context, Intent intent) {
+        Timber.i("BootBroadcastReceiver.onReceive() called");
         Timber.i("OnReceive..." + intent.getAction());
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
-            User user = User.getInstance(context);
-            if (user.lancerXCGuideBoot()) {
-                Util.lancerMainActivity(context, true);
-            }
+            Util.lancerMainActivity(context, true);
         }
     }
 }

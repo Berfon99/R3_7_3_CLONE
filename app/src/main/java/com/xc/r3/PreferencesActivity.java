@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import timber.log.Timber;
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -173,10 +174,10 @@ public class PreferencesActivity extends AppCompatActivity {
         boolean bootXCtrack = switchXCTrackBoot.isChecked();
         boolean delayXCtrackOnBoot = switchDelayXCTrackOnBoot.isChecked();
         boolean download = switchDownload.isChecked();
-        boolean bootXCGuide = switchXCGuideBoot.isChecked(); // Get the state of the new switch
-        user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, false, false, bootXCGuide); // Update the user's preference
+        boolean bootXCGuide = switchXCGuideBoot.isChecked();
+        Timber.d("Saving preferences: bootXCGuide = %b", bootXCGuide); // Add this line
+        user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, false, false, bootXCGuide);
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

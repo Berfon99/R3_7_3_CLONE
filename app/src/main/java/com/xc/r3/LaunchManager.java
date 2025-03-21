@@ -160,12 +160,14 @@ public class LaunchManager {
     }
 
     @SuppressLint("LogNotTimber")
-    public void traitementLorsDuBoot(Intent intent, boolean downloadFichierOpenAir, boolean lancerXCTrackBoot) {
+    public void traitementLorsDuBoot(Intent intent, boolean downloadFichierOpenAir, boolean lancerXCTrackBoot, boolean lancerXCGuideBoot) {
         Log.i("MonLog", "Trt lors du boot");
         if (downloadFichierOpenAir) {
             downloadListeFichiersOpenAir();
         } else if (lancerXCTrackBoot) {
             lancerXCTrack();
+        } else if (lancerXCGuideBoot) {
+            lancerXCGuide();
         }
         mainActivity.finish();
     }

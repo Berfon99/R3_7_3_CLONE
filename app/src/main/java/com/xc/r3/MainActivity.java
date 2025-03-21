@@ -70,7 +70,7 @@ public class MainActivity extends CommonActivity {
             notificationDateFichier = intent.getBooleanExtra(Util.NOTIFICATION_DATE_FICHIER, false);
         }
         if (boot)
-            launchManager.traitementLorsDuBoot(intent, user.downloadFichierOpenAir(), user.lancerXCTrackBoot());
+            launchManager.traitementLorsDuBoot(intent, user.downloadFichierOpenAir(), user.lancerXCTrackBoot(), user.lancerXCGuideBoot());
         else if (notificationAccesInternet)
             afficherMessageAccesInternet();
         else if (notificationDateFichier) {
