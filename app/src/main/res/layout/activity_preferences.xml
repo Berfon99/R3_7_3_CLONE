@@ -12,64 +12,68 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
-    <!-- Left Side -->
+    <!-- First Line -->
+    <!-- Left Side - Launch XCTrack on boot -->
     <Switch
         android:id="@+id/switch_xctrack"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        android:paddingVertical="8dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp"
         android:text="@string/boot_message"
         android:textColorLink="@color/colorPrimary"
         app:layout_constraintEnd_toStartOf="@+id/guideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Right Side - Delay XCTrack on boot -->
     <Switch
         android:id="@+id/switch_xctrack_delay"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:checked="false"
-        android:paddingVertical="8dp"
-        android:text="@string/delay_xctrack_launch_on_boot"
-        android:textColorLink="@color/colorPrimary"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch_xctrack" />
-
-    <!-- Right Side -->
-    <Switch
-        android:id="@+id/switch_download"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:paddingVertical="8dp"
-        android:text="@string/enable_download"
+        android:checked="false"
+        android:padding="16dp"
+        android:text="@string/delay_xctrack_launch_on_boot"
         android:textColorLink="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Second Line -->
+    <!-- Left Side - Launch XC Guide on boot -->
     <Switch
         android:id="@+id/switch_xcguide"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:paddingVertical="8dp"
+        android:padding="16dp"
         android:text="@string/boot_message_xcguide"
+        android:textColorLink="@color/colorPrimary"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_xctrack" />
+
+    <!-- Right Side - Download OpenAir file -->
+    <Switch
+        android:id="@+id/switch_download"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="16dp"
+        android:text="@string/enable_download"
         android:textColorLink="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/switch_download" />
+        app:layout_constraintTop_toBottomOf="@+id/switch_xctrack_delay" />
 
     <View
         android:id="@+id/divider"
@@ -79,7 +83,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch_xctrack_delay" />
+        app:layout_constraintTop_toBottomOf="@+id/switch_xcguide" />
 
     <View
         android:id="@+id/bottom_space"
@@ -119,6 +123,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:padding="16dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline_device_section"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_device_text_view" />
