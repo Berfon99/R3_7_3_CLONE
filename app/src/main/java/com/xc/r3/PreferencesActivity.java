@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
 import timber.log.Timber;
 
 public class PreferencesActivity extends AppCompatActivity {
@@ -23,7 +24,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private Switch switchXCTrackBoot;
     private Switch switchDelayXCTrackOnBoot;
     private Switch switchDownload;
-    private Switch switchXCGuideBoot; // New switch
+    private Switch switchXCGuideBoot;
     private User user;
 
     private Spinner modelSpinner;
@@ -48,7 +49,7 @@ public class PreferencesActivity extends AppCompatActivity {
         switchXCTrackBoot = findViewById(R.id.switch_xctrack);
         switchDelayXCTrackOnBoot = findViewById(R.id.switch_xctrack_delay);
         switchDownload = findViewById(R.id.switch_download);
-        switchXCGuideBoot = findViewById(R.id.switch_xcguide); // Initialize the new switch
+        switchXCGuideBoot = findViewById(R.id.switch_xcguide);
 
         // Initialize Model Selection UI
         modelSpinner = findViewById(R.id.model_spinner);
@@ -58,16 +59,7 @@ public class PreferencesActivity extends AppCompatActivity {
         setupModelSelection();
 
         // Setup Switch Listeners
-        switchXCTrackBoot.setOnCheckedChangeListener((buttonView, isChecked) -> setSwitchDelayXCTrackOnBoot());
-        switchDownload.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                showDownloadNotSupportedDialog();
-                switchDownload.setChecked(false);
-            }
-        });
-        switchXCGuideBoot.setOnCheckedChangeListener((buttonView, isChecked) -> { // Add listener for the new switch
-            sauver();
-        });
+        setupSwitchListeners();
 
         // Initialize Switch States
         initSwitches();
@@ -117,12 +109,42 @@ public class PreferencesActivity extends AppCompatActivity {
         setSwitchDelayXCTrackOnBoot();
         switchDelayXCTrackOnBoot.setChecked(user.delayXCTrackOnBoot());
         switchDownload.setChecked(user.downloadFichierOpenAir());
-        switchXCGuideBoot.setChecked(user.lancerXCGuideBoot()); // Set the initial state of the new switch
+        switchXCGuideBoot.setChecked(user.lancerXCGuideBoot());
+    }
+
+    private void setupSwitchListeners() {
+        switchXCTrackBoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            updateDelaySwitchVisibility();
+            sauver();
+        });
+
+        switchXCGuideBoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            updateDelaySwitchVisibility();
+            sauver();
+        });
+
+        switchDelayXCTrackOnBoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            sauver();
+        });
+
+        switchDownload.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                showDownloadNotSupportedDialog();
+                switchDownload.setChecked(false);
+            }
+            sauver();
+        });
+    }
+
+    private void updateDelaySwitchVisibility() {
+        if (switchXCTrackBoot.isChecked() && switchXCGuideBoot.isChecked()) {
+            switchDelayXCTrackOnBoot.setChecked(true);
+        }
+        setSwitchDelayXCTrackOnBoot();
     }
 
     private void setSwitchDelayXCTrackOnBoot() {
         switchDelayXCTrackOnBoot.setEnabled(switchXCTrackBoot.isChecked());
-        switchDelayXCTrackOnBoot.setChecked(switchXCTrackBoot.isChecked() && user.delayXCTrackOnBoot());
     }
 
     private void showDownloadNotSupportedDialog() {
@@ -175,9 +197,10 @@ public class PreferencesActivity extends AppCompatActivity {
         boolean delayXCtrackOnBoot = switchDelayXCTrackOnBoot.isChecked();
         boolean download = switchDownload.isChecked();
         boolean bootXCGuide = switchXCGuideBoot.isChecked();
-        Timber.d("Saving preferences: bootXCGuide = %b", bootXCGuide); // Add this line
+        Timber.d("Saving preferences: bootXCGuide = %b", bootXCGuide);
         user.setPreferencesBoolean(bootXCtrack, delayXCtrackOnBoot, download, false, false, bootXCGuide);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
