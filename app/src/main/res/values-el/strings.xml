@@ -91,4 +91,8 @@
 	<string name="download_not_supported_message">Αυτή η λειτουργία δεν υποστηρίζεται πλέον. Εάν επιθυμείτε να χρησιμοποιήσετε αυτήν τη λειτουργία, χρησιμοποιήστε μια προηγούμενη έκδοση του AIR³ Manager. Προτιμήστε το XCTrack Airspace αντ\' αυτού</string>
 	<string name="yes">Ναι</string>
 	<string name="no">Όχι</string>
+	<string name="boot_message_xcguide">Εκκίνηση του XC Guide κατά την εκκίνηση</string>
+	<string name="delay_xctrack_confirmation_message">Το XC Guide χρειάζεται χρόνο για να προετοιμαστεί σωστά πριν ξεκινήσει το XCTrack. Είστε σίγουρος ότι θέλετε να απενεργοποιήσετε αυτήν τη λειτουργία;</string>
+	<string name="are_you_sure">Είστε σίγουρος;</string>
+
 </resources>

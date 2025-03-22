@@ -124,7 +124,11 @@ public class PreferencesActivity extends AppCompatActivity {
         });
 
         switchDelayXCTrackOnBoot.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            sauver();
+            if (!isChecked && switchXCTrackBoot.isChecked() && switchXCGuideBoot.isChecked()) {
+                showDelayXCTrackConfirmationDialog();
+            } else {
+                sauver();
+            }
         });
 
         switchDownload.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -134,6 +138,22 @@ public class PreferencesActivity extends AppCompatActivity {
             }
             sauver();
         });
+    }
+
+    private void showDelayXCTrackConfirmationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.are_you_sure))
+                .setMessage(getString(R.string.delay_xctrack_confirmation_message))
+                .setPositiveButton(getString(R.string.ok), (dialog, which) -> {
+                    // User confirmed, proceed with unchecking the switch
+                    sauver();
+                })
+                .setNegativeButton(getString(R.string.annuler), (dialog, which) -> {
+                    // User canceled, re-check the switch
+                    switchDelayXCTrackOnBoot.setChecked(true);
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void updateDelaySwitchVisibility() {

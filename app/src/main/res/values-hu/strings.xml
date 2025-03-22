@@ -91,4 +91,8 @@
 	<string name="download_not_supported_message">Ez a funkció már nem támogatott. Ha ezt a funkciót szeretnéd használni, kérlek, használd az AIR³ Manager korábbi verzióját. Ehelyett válaszd a XCTrack Airspace-t</string>
 	<string name="yes">Igen</string>
 	<string name="no">Nem</string>
+	<string name="boot_message_xcguide">XC Guide indítása rendszerindításkor</string>
+	<string name="delay_xctrack_confirmation_message">Az XC Guide-nak időre van szüksége a megfelelő inicializáláshoz, mielőtt az XCTrack elindul. Biztosan ki szeretnéd kapcsolni ezt a funkciót?</string>
+	<string name="are_you_sure">Biztos benne?</string>
+
 </resources>

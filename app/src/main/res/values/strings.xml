@@ -94,4 +94,6 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="boot_message_xcguide">Launch XC Guide on boot</string>
+    <string name="delay_xctrack_confirmation_message">XC Guide needs time to initialise to work properly before XCTrack is launched. Are you sure you want to disable this feature?</string>
+    <string name="are_you_sure">Are you sure?</string>
 </resources>

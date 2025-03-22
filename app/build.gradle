@@ -18,8 +18,8 @@ android {
         applicationId "com.xc.r3"
         minSdkVersion 27
         targetSdkVersion 34
-        versionCode 3030
-        versionName "3.0.3" //Solving Bootstrap issue because of xcfg dropped in folder
+        versionCode 3040
+        versionName "3.0.4" //Launch XC Guide on boot
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {

@@ -91,4 +91,8 @@
 	<string name="download_not_supported_message">Deze functie wordt niet langer ondersteund. Als je deze functie wilt gebruiken, gebruik dan een eerdere versie van AIR³ Manager. Gebruik in plaats daarvan XCTrack Airspace</string>
 	<string name="yes">Ja</string>
 	<string name="no">Nee</string>
+	<string name="boot_message_xcguide">XC Guide starten bij opstarten</string>
+	<string name="delay_xctrack_confirmation_message">XC Guide heeft tijd nodig om correct te initialiseren voordat XCTrack wordt gestart. Weet u zeker dat u deze functie wilt uitschakelen?</string>
+	<string name="are_you_sure">Weet u het zeker?</string>
+
 </resources>

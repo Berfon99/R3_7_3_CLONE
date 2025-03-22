@@ -91,4 +91,8 @@
 	<string name="download_not_supported_message">Aquesta funció ja no és compatible. Si voleu utilitzar aquesta funció, utilitzeu una versió anterior d\'AIR³ Manager. Preferiu XCTrack Airspace en lloc d\'això</string>
 	<string name="yes">Sí</string>
 	<string name="no">No</string>
+	<string name="boot_message_xcguide">Inicia XC Guide a l\'arrencada</string>
+	<string name="delay_xctrack_confirmation_message">XC Guide necessita temps per inicialitzar-se correctament abans que s\'iniciï XCTrack. Esteu segur que voleu desactivar aquesta funció?</string>
+	<string name="are_you_sure">N\'esteu segur?</string>
+
 </resources>

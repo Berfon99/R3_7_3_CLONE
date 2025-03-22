@@ -1,1 +1,1 @@
-3.0.3 - Solving Bootstrap issue because of xcfg dropped in folder
+3.0.4 - Launch XC Guide on boot

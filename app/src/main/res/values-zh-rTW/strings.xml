@@ -91,4 +91,8 @@
 	<string name="download_not_supported_message">此功能不再受支援。如果您希望使用此功能，請使用 AIR³ Manager 的先前版本。請改用 XCTrack Airspace</string>
 	<string name="yes">是</string>
 	<string name="no">否</string>
+	<string name="boot_message_xcguide">開機時啟動 XC Guide</string>
+	<string name="delay_xctrack_confirmation_message">XC Guide 需要時間初始化才能在 XCTrack 啟動前正常運作。您確定要停用此功能嗎？</string>
+	<string name="are_you_sure">您確定嗎？</string>
+
 </resources>

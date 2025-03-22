@@ -4,3 +4,4 @@
 3.0.1 - No more Download of Openair files
 3.0.2 - Solving going back to MainActivity after closing XCTrack
 3.0.3 - Solving Bootstrap issue because of xcfg dropped in folder
+3.0.4 - Launch XC Guide on boot
