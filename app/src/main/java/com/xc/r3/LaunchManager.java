@@ -9,6 +9,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.os.Handler;
+import android.os.Looper;
 
 import java.util.List;
 
@@ -164,14 +166,22 @@ public class LaunchManager {
         Log.i("MonLog", "Trt lors du boot");
         if (downloadFichierOpenAir) {
             downloadListeFichiersOpenAir();
-        } else if (lancerXCTrackBoot) {
-            lancerXCTrack();
         } else if (lancerXCGuideBoot) {
             lancerXCGuide();
+            if (lancerXCTrackBoot) {
+                // Use the existing delay mechanism to delay XCTrack launch
+                User user = User.getInstance(mainActivity);
+                if (user.delayXCTrackOnBoot()) {
+                    new Handler(Looper.getMainLooper()).postDelayed(() -> lancerXCTrack(), Util.DELAY);
+                } else {
+                    lancerXCTrack();
+                }
+            }
+        } else if (lancerXCTrackBoot) {
+            lancerXCTrack();
         }
         mainActivity.finish();
     }
-
     public void afficherDialoguePreferences() {
         Intent intent = new Intent(mainActivity, PreferencesActivity.class);
         mainActivity.startActivityForResult(intent, MainActivity.PREFERENCES);

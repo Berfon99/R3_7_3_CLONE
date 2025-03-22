@@ -20,7 +20,7 @@ public class Util {
     public static final String BOOT = "boot";
     public static final String NOTIFICATION_DATE_FICHIER = "notification date fichier";
     public static final String NOTIFICATION_ACCES_INTERNET = "notification accès internet";
-    private static final int DELAY = 10 * 1000; // délai de 10 secondes avant de lancer
+    public static final int DELAY = 10 * 1000; // délai de 10 secondes avant de lancer
     private static final String TAG = "Util";
 
     public static void lancerXCTrack(Activity activity) {
