@@ -58,11 +58,13 @@ public class PreferencesActivity extends AppCompatActivity {
         // Setup Model Selection
         setupModelSelection();
 
+        // Initialize Switch States
+        initSwitches();
+
         // Setup Switch Listeners
         setupSwitchListeners();
 
-        // Initialize Switch States
-        initSwitches();
+
     }
 
     private void setupModelSelection() {
@@ -106,10 +108,10 @@ public class PreferencesActivity extends AppCompatActivity {
 
     private void initSwitches() {
         switchXCTrackBoot.setChecked(user.lancerXCTrackBoot());
-        setSwitchDelayXCTrackOnBoot();
+        switchXCGuideBoot.setChecked(user.lancerXCGuideBoot());
         switchDelayXCTrackOnBoot.setChecked(user.delayXCTrackOnBoot());
         switchDownload.setChecked(user.downloadFichierOpenAir());
-        switchXCGuideBoot.setChecked(user.lancerXCGuideBoot());
+        setSwitchDelayXCTrackOnBoot();
     }
 
     private void setupSwitchListeners() {

@@ -18,8 +18,8 @@ android {
         applicationId "com.xc.r3"
         minSdkVersion 27
         targetSdkVersion 34
-        versionCode 3040
-        versionName "3.0.4" //Launch XC Guide on boot
+        versionCode 3050
+        versionName "3.0.5" //Keep settings related to XCguide and delay xctrack
         useLibrary 'org.apache.http.legacy'
     }
     buildTypes {
